@@ -1,10 +1,17 @@
 const {
-    configure,
-    presets
+  configure,
+  presets
 } = require("eslint-kit");
 
 module.exports = configure({
     allowDebug: process.env.NODE_ENV !== "production",
+
+    include: ["vite.config.ts", ".eslintrc.cjs"],
+
+    parserOptions: {
+      project:  ['./tsconfig.json', './tsconfig.node.json'],
+      tsconfigRootDir: __dirname,
+    },
 
     presets: [
         presets.imports(),
