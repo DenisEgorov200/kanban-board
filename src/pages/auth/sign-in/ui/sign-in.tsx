@@ -5,7 +5,9 @@ export const SignInPage = () => {
         <h1 className="text-6xl font-extrabold text-blue-600">Kanban</h1>
       </div>
       <form action="">
-        <h2 className="mb-10 text-3xl font-bold">Log in to your account</h2>
+        <h2 className="mb-10 text-center text-3xl font-bold">
+          Log in to your account
+        </h2>
         <ul className="mb-7 flex items-center justify-center gap-4">
           <li className="w-full">
             <button className="flex w-full items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-5 py-2.5 transition-colors hover:bg-gray-100">
@@ -34,9 +36,6 @@ export const SignInPage = () => {
           placeholder="Email"
           className="mb-3 w-full rounded-md border border-gray-300 bg-white px-3 py-2 focus:outline-blue-600"
         />
-        <div className="mb-3 flex justify-end">
-          <p className="font-medium text-blue-600">Forgot your password?</p>
-        </div>
         <button className="w-full rounded-lg bg-blue-600 px-3 py-2 font-medium text-white transition-colors hover:bg-blue-700">
           Log in to Kanban
         </button>
