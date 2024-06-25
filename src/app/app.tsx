@@ -1,5 +1,11 @@
-import { SignInPage } from '@pages/auth/sign-in'
+import { Pages } from '@pages/index'
+import { router } from '@shared/routing'
+import { RouterProvider } from 'atomic-router-react'
 
 export const App = () => {
-  return <SignInPage />
+  return (
+    <RouterProvider router={router}>
+      <Pages />
+    </RouterProvider>
+  )
 }

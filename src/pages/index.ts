@@ -1,11 +1,18 @@
-import { createRoutesView, RouteRecord } from 'atomic-router-react'
+import { LayoutBase } from '@layouts/base'
+import { createRoutesView } from 'atomic-router-react'
+import { SignInRoute } from './auth/sign-in'
+import { HomeRoute } from './home'
 
-const pages = import.meta.glob<
-  true,
-  string,
-  { default: RouteRecord<object, object> }
->('./**/index.ts', { eager: true })
-
-const routes = Object.values(pages).map((page) => page.default)
-
-export const Pages = createRoutesView({ routes })
+export const Pages = createRoutesView({
+  routes: [
+    {
+      route: HomeRoute.route,
+      view: HomeRoute.view,
+      layout: LayoutBase,
+    },
+    {
+      route: SignInRoute.route,
+      view: SignInRoute.view,
+    },
+  ],
+})
