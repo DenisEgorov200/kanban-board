@@ -1,6 +1,6 @@
 import { SortableContext, useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { SortableItem } from '@shared/ui/sortable-item'
+import { useMemo } from 'react'
 
 interface Props {
   board: Column
@@ -19,14 +19,11 @@ interface Task {
 }
 
 export const Board = ({ board, items }: Props) => {
-  const {
-    setNodeRef,
-    attributes,
-    listeners,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({
+  const tasksIds = useMemo(() => {
+    return items.map((task) => task.id)
+  }, [items])
+
+  const { setNodeRef, transform, transition, isDragging } = useSortable({
     id: board.id,
     data: {
       type: 'Column',
@@ -50,24 +47,28 @@ export const Board = ({ board, items }: Props) => {
   }
 
   return (
-    <SortableContext items={items}>
+    <>
       <div ref={setNodeRef} style={style} className="rounded-md bg-white p-5">
         <div className="mb-2 border-b-2 border-black py-2 font-medium">
-          To do 2
+          {board.title} {tasksIds.length}
         </div>
         <ul className="flex flex-col gap-2">
-          {items.map((item) => (
-            <SortableItem key={item.id} id={item.id}>
-              <TaskCard task={item} />
-            </SortableItem>
-          ))}
+          <SortableContext items={tasksIds}>
+            {items.map((item) => (
+              <TaskCard key={item.id} task={item} />
+            ))}
+          </SortableContext>
         </ul>
       </div>
-    </SortableContext>
+    </>
   )
 }
 
-export const TaskCard = ({ task }: Task) => {
+interface TaskCardProps {
+  task: Task
+}
+
+export const TaskCard = ({ task }: TaskCardProps) => {
   const {
     setNodeRef,
     attributes,
@@ -82,8 +83,6 @@ export const TaskCard = ({ task }: Task) => {
       task,
     },
   })
-
-  console.log(task)
 
   const style = {
     transition,

@@ -2,6 +2,7 @@ import {
   DndContext,
   DragEndEvent,
   DragOverEvent,
+  DragOverlay,
   DragStartEvent,
   PointerSensor,
   useSensor,
@@ -9,7 +10,9 @@ import {
 } from '@dnd-kit/core'
 import { arrayMove, SortableContext } from '@dnd-kit/sortable'
 import { Board } from '@entities/board'
-import { useState } from 'react'
+import { TaskCard } from '@entities/board/ui/board'
+import { useMemo, useState } from 'react'
+import { createPortal } from 'react-dom'
 
 interface Column {
   id: string
@@ -29,7 +32,7 @@ const defaultCols: Column[] = [
   },
   {
     id: 'doing',
-    title: 'Work in progress',
+    title: 'In progress',
   },
   {
     id: 'done',
@@ -108,7 +111,7 @@ const defaultTasks: Task[] = [
 
 export const Kanban = () => {
   const [columns, setColumns] = useState(defaultCols)
-  const columnsId = columns.map((col) => col.id)
+  const columnsId = useMemo(() => columns.map((col) => col.id), [columns])
 
   const [tasks, setTasks] = useState(defaultTasks)
 
@@ -131,8 +134,8 @@ export const Kanban = () => {
       onDragEnd={onDragEnd}
       onDragOver={onDragOver}
     >
-      <SortableContext items={columnsId}>
-        <ul className="grid grid-cols-3 gap-2">
+      <ul className="grid grid-cols-3 gap-2">
+        <SortableContext items={columnsId}>
           {columns.map((column) => (
             <Board
               key={column.id}
@@ -140,8 +143,20 @@ export const Kanban = () => {
               items={tasks.filter((task) => task.columnId === column.id)}
             />
           ))}
-        </ul>
-      </SortableContext>
+        </SortableContext>
+      </ul>
+      {createPortal(
+        <DragOverlay>
+          {activeColumn && (
+            <Board
+              board={activeColumn}
+              items={tasks.filter((task) => task.columnId === activeColumn.id)}
+            />
+          )}
+          {activeTask && <TaskCard task={activeTask} />}
+        </DragOverlay>,
+        document.body,
+      )}
     </DndContext>
   )
 
