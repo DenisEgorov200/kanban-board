@@ -1,6 +1,7 @@
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { ReactNode } from 'react'
+import { Item } from '../item'
 
 interface Props {
   id: string
@@ -17,8 +18,8 @@ export const SortableItem = ({ id, children }: Props) => {
   }
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <Item ref={setNodeRef} style={style} {...attributes} {...listeners}>
       {children}
-    </div>
+    </Item>
   )
 }
