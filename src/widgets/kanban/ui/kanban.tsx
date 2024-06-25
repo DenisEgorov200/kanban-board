@@ -1,48 +1,21 @@
-import { DndContext } from '@dnd-kit/core'
+import { DndContext, DragEndEvent } from '@dnd-kit/core'
+import { Board } from '@entities/board'
+import { useState } from 'react'
 
 export const Kanban = () => {
+  const [isDropped, setIsDropped] = useState(false)
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    if (event.over && event.over.id === 'droppable') {
+      setIsDropped(true)
+    }
+  }
+
   return (
-    <DndContext>
+    <DndContext onDragEnd={handleDragEnd}>
       <ul className="grid grid-cols-3 gap-2">
-        <li className="rounded-md bg-white p-5">
-          <div className="mb-2 border-b-2 border-black py-2 font-medium">
-            To do 2
-          </div>
-          <ul className="flex flex-col gap-2">
-            <li className="rounded-md border-2 border-b-4 border-black p-2">
-              выучить effector
-            </li>
-            <li className="rounded-md border-2 border-b-4 border-green-800 p-2">
-              прописать план встречи
-            </li>
-          </ul>
-        </li>
-        <li className="rounded-md bg-white p-5">
-          <div className="mb-2 border-b-2 border-blue-300 py-2 font-medium">
-            In progress 2
-          </div>
-          <ul className="flex flex-col gap-2">
-            <li className="rounded-md border-2 border-b-4 border-black p-2">
-              выучить effector
-            </li>
-            <li className="rounded-md border-2 border-b-4 border-green-800 p-2">
-              прописать план встречи
-            </li>
-          </ul>
-        </li>
-        <li className="rounded-md bg-white p-5">
-          <div className="mb-2 border-b-2 border-gray-400 py-2 font-medium">
-            Done 2
-          </div>
-          <ul className="flex flex-col gap-2">
-            <li className="rounded-md border-2 border-b-4 border-black p-2">
-              выучить effector
-            </li>
-            <li className="rounded-md border-2 border-b-4 border-green-800 p-2">
-              прописать план встречи
-            </li>
-          </ul>
-        </li>
+        <Board id="todo" items={['1']} />
+        <Board id="in progress" items={['1']} />
       </ul>
     </DndContext>
   )
