@@ -13,7 +13,7 @@ export const LayoutBase = ({ children }: Props) => {
             <div className="h-10 w-10">
               <img src="/icons/logo.svg" alt="logo" />
             </div>
-            <h1 className="text-4xl font-extrabold text-blue-400">Kanban</h1>
+            <h1 className="text-4xl font-extrabold text-blue-600">Kanban</h1>
           </div>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-2">
@@ -42,7 +42,7 @@ export const LayoutBase = ({ children }: Props) => {
             <div className="h-5 w-5">
               <img src="/icons/logo.svg" alt="logo" />
             </div>
-            <h2 className="text-xl font-semibold text-blue-400">Kanban</h2>
+            <h2 className="text-xl font-semibold text-blue-600">Kanban</h2>
           </div>
           <ul className="flex items-center gap-2">
             <li>
