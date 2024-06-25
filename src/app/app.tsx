@@ -4,9 +4,8 @@ import { Kanban } from '@widgets/kanban'
 
 export const App = () => {
   return (
-    <SignInPage />
-    // <LayoutBase>
-    //   <Kanban />
-    // </LayoutBase>
+    <LayoutBase>
+      <Kanban />
+    </LayoutBase>
   )
 }

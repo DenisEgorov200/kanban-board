@@ -7,7 +7,7 @@ interface Props {
 export const LayoutBase = ({ children }: Props) => {
   return (
     <div className="flex h-dvh w-dvw flex-col">
-      <header className="mb-2 border-b border-gray-300 bg-white py-5">
+      <header className="mb-2 border-b border-gray-300 py-5">
         <div className="container mx-auto flex items-center justify-between px-2.5">
           <div className="flex items-center gap-2">
             <div className="h-10 w-10">
@@ -36,7 +36,7 @@ export const LayoutBase = ({ children }: Props) => {
         </div>
       </header>
       <main className="container mx-auto flex-1 px-2.5">{children}</main>
-      <footer className="border-t border-gray-300 bg-white py-5">
+      <footer className="border-t border-gray-300 py-5">
         <div className="container mx-auto flex items-center justify-between px-2.5">
           <div className="flex items-center gap-2">
             <div className="h-5 w-5">
@@ -44,7 +44,7 @@ export const LayoutBase = ({ children }: Props) => {
             </div>
             <h2 className="text-xl font-semibold text-blue-600">Kanban</h2>
           </div>
-          <ul className="flex items-center gap-2">
+          <ul className="flex items-center gap-4">
             <li>
               <a href="#" className="font-medium text-gray-600">
                 About
