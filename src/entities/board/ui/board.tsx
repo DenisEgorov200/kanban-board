@@ -49,8 +49,13 @@ export const Board = ({ board, items }: Props) => {
   return (
     <>
       <div ref={setNodeRef} style={style} className="rounded-md bg-white p-5">
-        <div className="mb-2 border-b-2 border-black py-2 font-medium">
-          {board.title} {tasksIds.length}
+        <div className="mb-2 flex items-center justify-between border-b-2 border-black py-2 font-medium">
+          <p>
+            {board.title} {tasksIds.length}
+          </p>
+          <button className="h-5 w-5">
+            <img src="/icons/settings.svg" alt="settings" />
+          </button>
         </div>
         <ul className="flex flex-col gap-2">
           <SortableContext items={tasksIds}>
