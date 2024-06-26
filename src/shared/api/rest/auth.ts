@@ -36,3 +36,9 @@ export const getMeFx = createEffect<void, User | null, AuthError>(async () => {
 
   return null
 })
+
+export const signOutFx = createEffect<void, void, AuthError>(async () => {
+  const { error } = await client.auth.signOut()
+
+  checkError(error)
+})
