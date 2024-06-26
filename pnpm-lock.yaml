@@ -35,6 +35,9 @@ dependencies:
   history:
     specifier: ^5.3.0
     version: 5.3.0
+  patronum:
+    specifier: ^2.2.0
+    version: 2.2.0(effector@23.2.2)
   react:
     specifier: ^18.3.1
     version: 18.3.1
@@ -3632,6 +3635,14 @@ packages:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
     engines: {node: '>=8'}
     dev: true
+
+  /patronum@2.2.0(effector@23.2.2):
+    resolution: {integrity: sha512-Idsb5swd+2UI1NuBlHJuVA4WlaUeEluZJxGAZ9obCViuEf4pP68bij3f1sZCM/vqqWPsbHclYweDNt/sWu0O1g==}
+    peerDependencies:
+      effector: ^23
+    dependencies:
+      effector: 23.2.2
+    dev: false
 
   /picocolors@1.0.1:
     resolution: {integrity: sha512-anP1Z8qwhkbmu7MFP5iTt+wQKXgwzf7zTyGlcdzabySa9vd0Xt392U0rVmz9poOaBj0uHJKyyo9/upk0HrEQew==}
