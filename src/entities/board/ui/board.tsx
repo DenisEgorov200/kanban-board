@@ -48,7 +48,11 @@ export const Board = ({ board, items }: Props) => {
 
   return (
     <>
-      <div ref={setNodeRef} style={style} className="rounded-md bg-white p-5">
+      <div
+        ref={setNodeRef}
+        style={style}
+        className="min-w-96 rounded-md bg-white p-5"
+      >
         <div className="mb-2 flex items-center justify-between border-b-2 border-black py-2 font-medium">
           <p>
             {board.title} {tasksIds.length}

@@ -42,7 +42,9 @@ export const LayoutBase = ({ children }: Props) => {
           </div>
         </div>
       </header>
-      <main className="container mx-auto flex-1 px-2.5">{children}</main>
+      <main className="container mx-auto flex-1 overflow-x-auto px-2.5">
+        {children}
+      </main>
       <footer className="border-t border-gray-300 py-5">
         <div className="container mx-auto flex items-center justify-between px-2.5">
           <div className="flex items-center gap-2">

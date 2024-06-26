@@ -134,16 +134,25 @@ export const Kanban = () => {
       onDragEnd={onDragEnd}
       onDragOver={onDragOver}
     >
-      <ul className="grid grid-cols-3 gap-2">
+      <ul className="flex gap-2">
         <SortableContext items={columnsId}>
           {columns.map((column) => (
-            <Board
-              key={column.id}
-              board={column}
-              items={tasks.filter((task) => task.columnId === column.id)}
-            />
+            <li key={column.id} className="w-full">
+              <Board
+                board={column}
+                items={tasks.filter((task) => task.columnId === column.id)}
+              />
+            </li>
           ))}
         </SortableContext>
+        <li className="p-5">
+          <button className="mb-2 flex min-w-56 items-center gap-2 border-b-2 border-black py-2 font-medium">
+            Add Column
+            <div className="h-5 w-5 rounded-full border border-black">
+              <img src="/icons/add.svg" alt="add" />
+            </div>
+          </button>
+        </li>
       </ul>
       {createPortal(
         <DragOverlay>
