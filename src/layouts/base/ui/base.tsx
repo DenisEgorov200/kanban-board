@@ -1,10 +1,14 @@
+import { useUnit } from 'effector-react'
 import { ReactNode } from 'react'
+import { signOutFx } from '../model'
 
 interface Props {
   children: ReactNode
 }
 
 export const LayoutBase = ({ children }: Props) => {
+  const handleSignOut = useUnit(signOutFx)
+
   return (
     <div className="flex h-dvh w-dvw flex-col">
       <header className="mb-2 border-b border-gray-300 py-5">
@@ -29,9 +33,12 @@ export const LayoutBase = ({ children }: Props) => {
                 className="h-8 w-8"
               />
             </div>
-            <div className="flex items-center">
+            <button
+              onClick={() => handleSignOut()}
+              className="flex items-center"
+            >
               <img src="/icons/logout.svg" alt="logout" className="h-6 w-6" />
-            </div>
+            </button>
           </div>
         </div>
       </header>
