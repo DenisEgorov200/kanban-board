@@ -1,4 +1,9 @@
+import { useUnit } from 'effector-react'
+import { $email, emailChanged } from '../model'
+
 export const SignInPage = () => {
+  const [email, handleEmail] = useUnit([$email, emailChanged])
+
   return (
     <div className="flex h-dvh w-dvw flex-col items-center justify-center">
       <div className="mb-12 flex items-center gap-2">
@@ -34,9 +39,14 @@ export const SignInPage = () => {
         <input
           type="text"
           placeholder="Email"
+          value={email}
+          onChange={(e) => handleEmail(e.target.value)}
           className="mb-3 w-full rounded-md border border-gray-300 bg-white px-3 py-2 focus:outline-blue-600"
         />
-        <button className="w-full rounded-lg bg-blue-600 px-3 py-2 font-medium text-white transition-colors hover:bg-blue-700">
+        <button
+          type="submit"
+          className="w-full rounded-lg bg-blue-600 px-3 py-2 font-medium text-white transition-colors hover:bg-blue-700"
+        >
           Log in to Kanban
         </button>
       </form>
