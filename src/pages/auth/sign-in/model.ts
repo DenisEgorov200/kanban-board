@@ -15,6 +15,7 @@ export const signInFx = attach({ effect: api.auth.signInWithEmailFx })
 
 export const formSubmitted = createEvent()
 export const emailChanged = createEvent<string>()
+export const backToLoginClicked = createEvent()
 
 export const $email = createStore('')
 export const $error = createStore<SignInError | null>(null)
@@ -48,4 +49,9 @@ $error.on(signInFx.failData, (_, error) => {
     return 'RateLimit'
   }
   return 'UnknownError'
+})
+
+sample({
+  clock: backToLoginClicked,
+  target: [$email.reinit, $error.reinit, $finished.reinit],
 })

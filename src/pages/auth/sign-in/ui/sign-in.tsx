@@ -4,6 +4,7 @@ import {
   $error,
   $finished,
   $pending,
+  backToLoginClicked,
   emailChanged,
   formSubmitted,
   SignInError,
@@ -88,7 +89,7 @@ const LoginForm = () => {
 }
 
 const LoginSucceeded = () => {
-  const [email] = useUnit($email)
+  const [email, handleBack] = useUnit([$email, backToLoginClicked])
 
   return (
     <div className="flex flex-col gap-4">
@@ -97,7 +98,10 @@ const LoginSucceeded = () => {
         We sent a login link to <span className="">{email}</span>
       </p>
       <div className="flex justify-center">
-        <button className="flex items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-5 py-2.5 transition-colors hover:bg-gray-100">
+        <button
+          onClick={() => handleBack()}
+          className="flex items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-5 py-2.5 transition-colors hover:bg-gray-100"
+        >
           Back to login
         </button>
       </div>
