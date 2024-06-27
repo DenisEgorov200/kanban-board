@@ -1,1 +1,1 @@
-export { Board } from './ui/board'
+export { Board, TaskCard } from './ui/board'

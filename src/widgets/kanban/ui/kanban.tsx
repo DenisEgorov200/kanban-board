@@ -9,8 +9,7 @@ import {
   useSensors,
 } from '@dnd-kit/core'
 import { arrayMove, SortableContext } from '@dnd-kit/sortable'
-import { Board } from '@entities/board'
-import { TaskCard } from '@entities/board/ui/board'
+import { Board, TaskCard } from '@entities/board'
 import { useUnit } from 'effector-react'
 import { useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
