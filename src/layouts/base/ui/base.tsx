@@ -1,3 +1,5 @@
+import { routes } from '@shared/routing'
+import { Link } from 'atomic-router-react'
 import { useUnit } from 'effector-react'
 import { ReactNode } from 'react'
 import { signOutFx } from '../model'
@@ -6,18 +8,36 @@ interface Props {
   children: ReactNode
 }
 
+const LINKS = [{ id: 0, route: routes.tasks, value: 'tasks' }]
+
 export const LayoutBase = ({ children }: Props) => {
   const handleSignOut = useUnit(signOutFx)
 
   return (
     <div className="flex h-dvh w-dvw flex-col">
-      <header className="mb-2 border-b border-gray-300 py-5">
+      <header className="border-b border-gray-300 p-5">
         <div className="container mx-auto flex items-center justify-between px-2.5">
-          <div className="flex items-center gap-2">
-            <div className="h-10 w-10">
-              <img src="/icons/logo.svg" alt="logo" />
-            </div>
-            <h1 className="text-4xl font-extrabold text-blue-600">Kanban</h1>
+          <div className="flex items-end gap-4">
+            <Link to={routes.home} className="flex items-center gap-2">
+              <div className="h-10 w-10">
+                <img src="/icons/logo.svg" alt="logo" />
+              </div>
+              <h1 className="text-4xl font-extrabold text-blue-600">Kanban</h1>
+            </Link>
+            <ul className="flex items-center gap-8">
+              {LINKS.map((link) => (
+                <li key={link.id}>
+                  <Link
+                    to={link.route}
+                    className="text-lg capitalize text-gray-600"
+                    activeClassName="font-semibold"
+                    inactiveClassName="font-medium"
+                  >
+                    {link.value}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-2">
