@@ -1,3 +1,9 @@
+import { CheckMark } from '@shared/ui/check-mark'
+
 export const TodoCard = () => {
-  return <div>todo-card</div>
+  return (
+    <div>
+      <CheckMark />
+    </div>
+  )
 }
