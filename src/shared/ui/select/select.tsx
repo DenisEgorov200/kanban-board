@@ -6,7 +6,7 @@ interface Props {
   placeholder?: ReactNode
   data?: string[]
   value?: ReactNode
-  onChange?: (value: string) => void
+  onChange: (value: string) => void
 }
 
 export const Select = ({
@@ -18,9 +18,9 @@ export const Select = ({
 }: Props) => {
   const [isActive, setIsActive] = useState(false)
 
-  const handleChange = (e: MouseEvent<HTMLLIElement, MouseEvent>) => {
+  const handleChange = (e: MouseEvent<HTMLLIElement>) => {
     e.stopPropagation()
-    onChange(e.target.textContent)
+    onChange((e.target as HTMLElement).textContent || '')
     setIsActive(false)
   }
 

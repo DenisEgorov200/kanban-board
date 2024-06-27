@@ -19,6 +19,7 @@ export const TasksPage = () => {
           label="Sort by"
           placeholder="Sort"
           data={['React', 'Angular', 'Vue', 'Svelte']}
+          onChange={() => console.log('@changed')}
         />
       </div>
       <ul className="flex flex-col gap-2">
