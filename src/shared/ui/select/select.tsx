@@ -44,7 +44,7 @@ export const Select = ({
         </div>
         {isActive && (
           <button
-            className="absolute left-0 top-14 z-10 w-full rounded-md bg-blue-50"
+            className="absolute left-0 top-14 z-10 w-full overflow-hidden rounded-md bg-blue-50"
             onClick={() => setIsActive(false)}
           >
             <ul className="flex max-h-40 flex-col overflow-y-auto">
