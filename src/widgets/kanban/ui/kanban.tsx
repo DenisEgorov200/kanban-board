@@ -11,34 +11,16 @@ import {
 import { arrayMove, SortableContext } from '@dnd-kit/sortable'
 import { Board } from '@entities/board'
 import { TaskCard } from '@entities/board/ui/board'
+import { useUnit } from 'effector-react'
 import { useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
-
-interface Column {
-  id: string
-  title: string
-}
+import { $columns, columnsChanged } from '../model'
 
 interface Task {
   id: string
   columnId: string
   content: string
 }
-
-const defaultCols: Column[] = [
-  {
-    id: 'todo',
-    title: 'Todo',
-  },
-  {
-    id: 'doing',
-    title: 'In progress',
-  },
-  {
-    id: 'done',
-    title: 'Done',
-  },
-]
 
 const defaultTasks: Task[] = [
   {
@@ -110,7 +92,8 @@ const defaultTasks: Task[] = [
 ]
 
 export const Kanban = () => {
-  const [columns, setColumns] = useState(defaultCols)
+  const [columns, handleColumnsChanged] = useUnit([$columns, columnsChanged])
+
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns])
 
   const [tasks, setTasks] = useState(defaultTasks)
@@ -196,13 +179,7 @@ export const Kanban = () => {
 
     console.log('DRAG END')
 
-    setColumns((columns) => {
-      const activeColumnIndex = columns.findIndex((col) => col.id === activeId)
-
-      const overColumnIndex = columns.findIndex((col) => col.id === overId)
-
-      return arrayMove(columns, activeColumnIndex, overColumnIndex)
-    })
+    handleColumnsChanged()
   }
 
   function onDragOver(event: DragOverEvent) {
