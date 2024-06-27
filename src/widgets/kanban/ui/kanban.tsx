@@ -14,15 +14,9 @@ import { TaskCard } from '@entities/board/ui/board'
 import { useUnit } from 'effector-react'
 import { useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { $columns, columnsChanged } from '../model'
+import { $columns, Column, columnsChanged, Task } from '../model'
 
-interface Task {
-  id: string
-  columnId: string
-  content: string
-}
-
-const defaultTasks: Task[] = [
+const defaultTasks = [
   {
     id: '1',
     columnId: 'todo',
@@ -195,6 +189,8 @@ export const Kanban = () => {
     const isOverATask = over.data.current?.type === 'Task'
 
     if (!isActiveATask) return
+
+    console.log('@columnsId', columnsId)
 
     // Im dropping a Task over another Task
     if (isActiveATask && isOverATask) {
