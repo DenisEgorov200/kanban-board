@@ -1,4 +1,6 @@
-import { createEvent, createStore } from 'effector'
+import { DragStartEvent, UniqueIdentifier } from '@dnd-kit/core'
+import { arrayMove } from '@dnd-kit/sortable'
+import { createEvent, createStore, sample } from 'effector'
 
 export interface Column {
   id: string
@@ -7,7 +9,7 @@ export interface Column {
 
 export interface Task {
   id: string
-  columnId: string
+  columnId: UniqueIdentifier
   content: string
 }
 
@@ -98,5 +100,51 @@ const defaultTasks: Task[] = [
 export const columnsChanged = createEvent()
 export const tasksChanged = createEvent()
 
+export const taskDropped = createEvent<{
+  activeId: UniqueIdentifier
+  overId: UniqueIdentifier
+}>()
+export const columnDropped = createEvent<{
+  activeId: UniqueIdentifier
+  overId: UniqueIdentifier
+}>()
+
+export const activeColumnChanged = createEvent<Column | null>()
+export const activeTaskChanged = createEvent<Task | null>()
+
 export const $columns = createStore(defaultCols)
+export const $columnsId = $columns.map((col) => col.map(({ id }) => id))
 export const $tasks = createStore(defaultTasks)
+
+export const $activeColumn = createStore<Column | null>(null)
+export const $activeTask = createEvent<Task | null>()
+
+sample({
+  clock: taskDropped,
+  source: $tasks,
+  fn: (tasks, { activeId, overId }) => {
+    const activeIndex = tasks.findIndex((t) => t.id === activeId)
+    const overIndex = tasks.findIndex((t) => t.id === overId)
+
+    if (tasks[activeIndex].columnId !== tasks[overIndex].columnId) {
+      // Fix introduced after video recording
+      tasks[activeIndex].columnId = tasks[overIndex].columnId
+      return arrayMove(tasks, activeIndex, overIndex - 1)
+    }
+
+    return arrayMove(tasks, activeIndex, overIndex)
+  },
+  target: $tasks,
+})
+
+sample({
+  clock: columnDropped,
+  source: $tasks,
+  fn: (tasks, { activeId, overId }) => {
+    const activeIndex = tasks.findIndex((t) => t.id === activeId)
+    tasks[activeIndex].columnId = overId
+
+    return arrayMove(tasks, activeIndex, activeIndex)
+  },
+  target: $tasks,
+})

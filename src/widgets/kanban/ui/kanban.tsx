@@ -8,92 +8,40 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
-import { arrayMove, SortableContext } from '@dnd-kit/sortable'
+import { SortableContext } from '@dnd-kit/sortable'
 import { Board, TaskCard } from '@entities/board'
 import { useUnit } from 'effector-react'
-import { useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { $columns, Column, columnsChanged, Task } from '../model'
-
-const defaultTasks = [
-  {
-    id: '1',
-    columnId: 'todo',
-    content: 'List admin APIs for dashboard',
-  },
-  {
-    id: '2',
-    columnId: 'todo',
-    content:
-      'Develop user registration functionality with OTP delivered on SMS after email confirmation and phone number confirmation',
-  },
-  {
-    id: '3',
-    columnId: 'doing',
-    content: 'Conduct security testing',
-  },
-  {
-    id: '4',
-    columnId: 'doing',
-    content: 'Analyze competitors',
-  },
-  {
-    id: '5',
-    columnId: 'done',
-    content: 'Create UI kit documentation',
-  },
-  {
-    id: '6',
-    columnId: 'done',
-    content: 'Dev meeting',
-  },
-  {
-    id: '7',
-    columnId: 'done',
-    content: 'Deliver dashboard prototype',
-  },
-  {
-    id: '8',
-    columnId: 'todo',
-    content: 'Optimize application performance',
-  },
-  {
-    id: '9',
-    columnId: 'todo',
-    content: 'Implement data validation',
-  },
-  {
-    id: '10',
-    columnId: 'todo',
-    content: 'Design database schema',
-  },
-  {
-    id: '11',
-    columnId: 'todo',
-    content: 'Integrate SSL web certificates into workflow',
-  },
-  {
-    id: '12',
-    columnId: 'doing',
-    content: 'Implement error logging and monitoring',
-  },
-  {
-    id: '13',
-    columnId: 'doing',
-    content: 'Design and implement responsive UI',
-  },
-]
+import {
+  $activeColumn,
+  $activeTask,
+  $columns,
+  $columnsId,
+  $tasks,
+  activeColumnChanged,
+  activeTaskChanged,
+  columnDropped,
+  taskDropped,
+} from '../model'
 
 export const Kanban = () => {
-  const [columns, handleColumnsChanged] = useUnit([$columns, columnsChanged])
+  const [columns, columnsId] = useUnit([$columns, $columnsId])
 
-  const columnsId = useMemo(() => columns.map((col) => col.id), [columns])
+  const [tasks, handleTaskDropped, handleColumnDropped] = useUnit([
+    $tasks,
+    taskDropped,
+    columnDropped,
+  ])
 
-  const [tasks, setTasks] = useState(defaultTasks)
+  const [activeColumn, handleActiveColumnChanged] = useUnit([
+    $activeColumn,
+    activeColumnChanged,
+  ])
 
-  const [activeColumn, setActiveColumn] = useState<Column | null>(null)
-
-  const [activeTask, setActiveTask] = useState<Task | null>(null)
+  const [activeTask, handleActiveTaskChanged] = useUnit([
+    $activeTask,
+    activeTaskChanged,
+  ])
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -138,7 +86,7 @@ export const Kanban = () => {
               items={tasks.filter((task) => task.columnId === activeColumn.id)}
             />
           )}
-          {activeTask && <TaskCard task={activeTask} />}
+          <TaskCard task={activeTask} />
         </DragOverlay>,
         document.body,
       )}
@@ -147,17 +95,17 @@ export const Kanban = () => {
 
   function onDragStart(event: DragStartEvent) {
     if (event.active.data.current?.type === 'Column') {
-      setActiveColumn(event.active.data.current.column)
+      handleActiveColumnChanged(event.active.data.current.column)
     }
 
     if (event.active.data.current?.type === 'Task') {
-      setActiveTask(event.active.data.current.task)
+      handleActiveTaskChanged(event.active.data.current.task)
     }
   }
 
   function onDragEnd(event: DragEndEvent) {
-    setActiveColumn(null)
-    setActiveTask(null)
+    handleActiveColumnChanged(null)
+    handleActiveTaskChanged(null)
 
     const { active, over } = event
     if (!over) return
@@ -171,8 +119,6 @@ export const Kanban = () => {
     if (!isActiveAColumn) return
 
     console.log('DRAG END')
-
-    handleColumnsChanged()
   }
 
   function onDragOver(event: DragOverEvent) {
@@ -193,31 +139,32 @@ export const Kanban = () => {
 
     // Im dropping a Task over another Task
     if (isActiveATask && isOverATask) {
-      setTasks((tasks) => {
-        const activeIndex = tasks.findIndex((t) => t.id === activeId)
-        const overIndex = tasks.findIndex((t) => t.id === overId)
+      handleTaskDropped({ activeId, overId })
+      // setTasks((tasks) => {
+      //   const activeIndex = tasks.findIndex((t) => t.id === activeId)
+      //   const overIndex = tasks.findIndex((t) => t.id === overId)
 
-        if (tasks[activeIndex].columnId !== tasks[overIndex].columnId) {
-          // Fix introduced after video recording
-          tasks[activeIndex].columnId = tasks[overIndex].columnId
-          return arrayMove(tasks, activeIndex, overIndex - 1)
-        }
+      //   if (tasks[activeIndex].columnId !== tasks[overIndex].columnId) {
+      //     // Fix introduced after video recording
+      //     tasks[activeIndex].columnId = tasks[overIndex].columnId
+      //     return arrayMove(tasks, activeIndex, overIndex - 1)
+      //   }
 
-        return arrayMove(tasks, activeIndex, overIndex)
-      })
+      //   return arrayMove(tasks, activeIndex, overIndex)
+      // })
     }
 
     const isOverAColumn = over.data.current?.type === 'Column'
 
     // Im dropping a Task over a column
     if (isActiveATask && isOverAColumn) {
-      setTasks((tasks) => {
-        const activeIndex = tasks.findIndex((t) => t.id === activeId)
-
-        tasks[activeIndex].columnId = overId
-        console.log('DROPPING TASK OVER COLUMN', { activeIndex })
-        return arrayMove(tasks, activeIndex, activeIndex)
-      })
+      handleColumnDropped({ activeId, overId })
+      // setTasks((tasks) => {
+      //   const activeIndex = tasks.findIndex((t) => t.id === activeId)
+      //   tasks[activeIndex].columnId = overId
+      //   console.log('DROPPING TASK OVER COLUMN', { activeIndex })
+      //   return arrayMove(tasks, activeIndex, activeIndex)
+      // })
     }
   }
 }

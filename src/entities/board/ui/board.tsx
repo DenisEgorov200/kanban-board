@@ -1,3 +1,4 @@
+import { UniqueIdentifier } from '@dnd-kit/core'
 import { SortableContext, useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useMemo } from 'react'
@@ -14,7 +15,7 @@ interface Column {
 
 interface Task {
   id: string
-  columnId: string
+  columnId: UniqueIdentifier
   content: string
 }
 
