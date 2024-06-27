@@ -37,7 +37,7 @@ export const Select = ({
         <div
           className={clsx(
             'h-5 w-5 transition-transform',
-            isActive ? '-rotate-90' : 'rotate-90',
+            isActive ? 'rotate-90' : '-rotate-90',
           )}
         >
           <img src="/icons/arrow.svg" alt="arrow" />
