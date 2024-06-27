@@ -3,6 +3,7 @@ import { createRoutesView } from 'atomic-router-react'
 import { AuthFinishRoute } from './auth/finish'
 import { SignInRoute } from './auth/sign-in'
 import { HomeRoute } from './home'
+import { TasksRoute } from './tasks'
 
 export const Pages = createRoutesView({
   routes: [
@@ -18,6 +19,11 @@ export const Pages = createRoutesView({
     {
       route: AuthFinishRoute.route,
       view: AuthFinishRoute.view,
+    },
+    {
+      route: TasksRoute.route,
+      view: TasksRoute.view,
+      layout: LayoutBase,
     },
   ],
 })
