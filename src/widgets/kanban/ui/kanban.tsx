@@ -25,9 +25,10 @@ import {
 } from '../model'
 
 export const Kanban = () => {
-  const [columns, columnsId] = useUnit([$columns, $columnsId])
+  const [columns, handleColumnDropped] = useUnit([$columns, columnDropped])
+  const columnsId = useUnit($columnsId)
 
-  const [tasks, handleTaskDropped, handleColumnDropped] = useUnit([
+  const [tasks, handleTaskDropped] = useUnit([
     $tasks,
     taskDropped,
     columnDropped,
@@ -117,8 +118,6 @@ export const Kanban = () => {
 
     const isActiveAColumn = active.data.current?.type === 'Column'
     if (!isActiveAColumn) return
-
-    console.log('DRAG END')
   }
 
   function onDragOver(event: DragOverEvent) {
@@ -135,23 +134,9 @@ export const Kanban = () => {
 
     if (!isActiveATask) return
 
-    console.log('@columnsId', columnsId)
-
     // Im dropping a Task over another Task
     if (isActiveATask && isOverATask) {
       handleTaskDropped({ activeId, overId })
-      // setTasks((tasks) => {
-      //   const activeIndex = tasks.findIndex((t) => t.id === activeId)
-      //   const overIndex = tasks.findIndex((t) => t.id === overId)
-
-      //   if (tasks[activeIndex].columnId !== tasks[overIndex].columnId) {
-      //     // Fix introduced after video recording
-      //     tasks[activeIndex].columnId = tasks[overIndex].columnId
-      //     return arrayMove(tasks, activeIndex, overIndex - 1)
-      //   }
-
-      //   return arrayMove(tasks, activeIndex, overIndex)
-      // })
     }
 
     const isOverAColumn = over.data.current?.type === 'Column'
@@ -159,12 +144,6 @@ export const Kanban = () => {
     // Im dropping a Task over a column
     if (isActiveATask && isOverAColumn) {
       handleColumnDropped({ activeId, overId })
-      // setTasks((tasks) => {
-      //   const activeIndex = tasks.findIndex((t) => t.id === activeId)
-      //   tasks[activeIndex].columnId = overId
-      //   console.log('DROPPING TASK OVER COLUMN', { activeIndex })
-      //   return arrayMove(tasks, activeIndex, activeIndex)
-      // })
     }
   }
 }

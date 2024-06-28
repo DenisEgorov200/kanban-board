@@ -117,8 +117,12 @@ export const $columnsId = $columns.map((col) => col.map(({ id }) => id))
 export const $tasks = createStore(defaultTasks)
 
 export const $activeColumn = createStore<Column | null>(null)
-export const $activeTask = createEvent<Task | null>()
+export const $activeTask = createStore<Task | null>(null)
 
+$activeTask.on(activeTaskChanged, (_, activeTask) => activeTask)
+$activeColumn.on(activeColumnChanged, (_, activeColumn) => activeColumn)
+
+// TODO: Change order logic
 sample({
   clock: taskDropped,
   source: $tasks,
@@ -126,25 +130,19 @@ sample({
     const activeIndex = tasks.findIndex((t) => t.id === activeId)
     const overIndex = tasks.findIndex((t) => t.id === overId)
 
-    if (tasks[activeIndex].columnId !== tasks[overIndex].columnId) {
-      // Fix introduced after video recording
-      tasks[activeIndex].columnId = tasks[overIndex].columnId
-      return arrayMove(tasks, activeIndex, overIndex - 1)
-    }
-
     return arrayMove(tasks, activeIndex, overIndex)
   },
   target: $tasks,
 })
 
-sample({
-  clock: columnDropped,
-  source: $tasks,
-  fn: (tasks, { activeId, overId }) => {
-    const activeIndex = tasks.findIndex((t) => t.id === activeId)
-    tasks[activeIndex].columnId = overId
+// sample({
+//   clock: columnDropped,
+//   source: $tasks,
+//   fn: (tasks, { activeId, overId }) => {
+//     const activeIndex = tasks.findIndex((t) => t.id === activeId)
+//     tasks[activeIndex].columnId = overId
 
-    return arrayMove(tasks, activeIndex, activeIndex)
-  },
-  target: $tasks,
-})
+//     return arrayMove(tasks, activeIndex, activeIndex)
+//   },
+//   target: $tasks,
+// })
