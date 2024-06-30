@@ -1,6 +1,7 @@
-import { DragStartEvent, UniqueIdentifier } from '@dnd-kit/core'
+import { UniqueIdentifier } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 import { createEvent, createStore, sample } from 'effector'
+import { debounce } from 'patronum'
 
 export interface Column {
   id: string
@@ -114,7 +115,9 @@ export const activeTaskChanged = createEvent<Task | null>()
 
 export const $columns = createStore(defaultCols)
 export const $columnsId = $columns.map((col) => col.map(({ id }) => id))
+
 export const $tasks = createStore(defaultTasks)
+export const $tasksIds = $tasks.map((task) => task.map(({ id }) => id))
 
 export const $activeColumn = createStore<Column | null>(null)
 export const $activeTask = createStore<Task | null>(null)
@@ -130,19 +133,24 @@ sample({
     const activeIndex = tasks.findIndex((t) => t.id === activeId)
     const overIndex = tasks.findIndex((t) => t.id === overId)
 
+    if (tasks[activeIndex].columnId !== tasks[overIndex].columnId) {
+      tasks[activeIndex].columnId = tasks[overIndex].columnId
+      return arrayMove(tasks, activeIndex, overIndex - 1)
+    }
+
     return arrayMove(tasks, activeIndex, overIndex)
   },
   target: $tasks,
 })
 
-// sample({
-//   clock: columnDropped,
-//   source: $tasks,
-//   fn: (tasks, { activeId, overId }) => {
-//     const activeIndex = tasks.findIndex((t) => t.id === activeId)
-//     tasks[activeIndex].columnId = overId
+sample({
+  clock: columnDropped,
+  source: $tasks,
+  fn: (tasks, { activeId, overId }) => {
+    const activeIndex = tasks.findIndex((t) => t.id === activeId)
+    tasks[activeIndex].columnId = overId
 
-//     return arrayMove(tasks, activeIndex, activeIndex)
-//   },
-//   target: $tasks,
-// })
+    return arrayMove(tasks, activeIndex, activeIndex)
+  },
+  target: $tasks,
+})

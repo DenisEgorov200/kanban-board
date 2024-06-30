@@ -18,6 +18,7 @@ import {
   $columns,
   $columnsId,
   $tasks,
+  $tasksIds,
   activeColumnChanged,
   activeTaskChanged,
   columnDropped,
@@ -28,11 +29,9 @@ export const Kanban = () => {
   const [columns, handleColumnDropped] = useUnit([$columns, columnDropped])
   const columnsId = useUnit($columnsId)
 
-  const [tasks, handleTaskDropped] = useUnit([
-    $tasks,
-    taskDropped,
-    columnDropped,
-  ])
+  const [tasks, handleTaskDropped] = useUnit([$tasks, taskDropped])
+
+  const tasksIds = useUnit($tasksIds)
 
   const [activeColumn, handleActiveColumnChanged] = useUnit([
     $activeColumn,
@@ -65,7 +64,8 @@ export const Kanban = () => {
             <li key={column.id} className="w-full">
               <Board
                 board={column}
-                items={tasks.filter((task) => task.columnId === column.id)}
+                tasks={tasks.filter((task) => task.columnId === column.id)}
+                tasksIds={tasksIds}
               />
             </li>
           ))}
@@ -84,7 +84,8 @@ export const Kanban = () => {
           {activeColumn && (
             <Board
               board={activeColumn}
-              items={tasks.filter((task) => task.columnId === activeColumn.id)}
+              tasks={tasks.filter((task) => task.columnId === activeColumn.id)}
+              tasksIds={tasksIds}
             />
           )}
           <TaskCard task={activeTask} />

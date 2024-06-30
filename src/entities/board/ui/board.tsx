@@ -1,11 +1,11 @@
 import { UniqueIdentifier } from '@dnd-kit/core'
 import { SortableContext, useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { useMemo } from 'react'
 
 interface Props {
   board: Column
-  items: Task[]
+  tasks: Task[]
+  tasksIds: string[]
 }
 
 interface Column {
@@ -19,11 +19,7 @@ interface Task {
   content: string
 }
 
-export const Board = ({ board, items }: Props) => {
-  const tasksIds = useMemo(() => {
-    return items.map((task) => task.id)
-  }, [items])
-
+export const Board = ({ board, tasks, tasksIds }: Props) => {
   const { setNodeRef, transform, transition, isDragging } = useSortable({
     id: board.id,
     data: {
@@ -64,8 +60,8 @@ export const Board = ({ board, items }: Props) => {
         </div>
         <ul className="flex flex-col gap-2">
           <SortableContext items={tasksIds}>
-            {items.map((item) => (
-              <TaskCard key={item.id} task={item} />
+            {tasks.map((task) => (
+              <TaskCard key={task.id} task={task} />
             ))}
           </SortableContext>
         </ul>
@@ -98,6 +94,8 @@ export const TaskCard = ({ task }: TaskCardProps) => {
     transition,
     transform: CSS.Transform.toString(transform),
   }
+
+  console.log('@task', task)
 
   if (isDragging) {
     return (
