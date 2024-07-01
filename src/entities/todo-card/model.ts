@@ -3,10 +3,13 @@ import { createEvent, createStore, sample } from 'effector'
 
 export const taskRoute = routes.task
 
+export const alertOpened = createEvent<boolean>()
 export const linkCopied = createEvent<string>()
 
+export const $alertOpen = createStore<boolean>(false)
 const $link = createStore('')
 
+$alertOpen.on(alertOpened, (_, open) => open)
 $link.on(linkCopied, (_, link) => link)
 
 sample({

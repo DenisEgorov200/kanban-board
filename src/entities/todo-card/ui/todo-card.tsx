@@ -1,9 +1,10 @@
+import { AlertDialog } from '@shared/ui/alert-dialog'
 import { CheckMark } from '@shared/ui/check-mark'
 import { DropdownMenu } from '@shared/ui/dropdown-menu'
 import { useLink } from 'atomic-router-react'
 import { useUnit } from 'effector-react'
 import { useState } from 'react'
-import { linkCopied, taskRoute } from '../model'
+import { $alertOpen, alertOpened, linkCopied, taskRoute } from '../model'
 
 interface Props {
   id: string
@@ -14,6 +15,8 @@ interface Props {
 export const TodoCard = ({ id, status, content }: Props) => {
   const link = useLink(taskRoute, { id })
   const handleCopied = useUnit(linkCopied)
+
+  const [alertOpen, handleAlertOpened] = useUnit([$alertOpen, alertOpened])
 
   const [isDone, setIsDone] = useState(status)
 
@@ -32,7 +35,10 @@ export const TodoCard = ({ id, status, content }: Props) => {
             <img src="/icons/hyperlink.svg" alt="hyperlink" />
           </button>
         </li>
-        <DropdownMenu />
+        <li>
+          <DropdownMenu onOpenChange={handleAlertOpened} />
+          <AlertDialog open={alertOpen} onOpenChange={handleAlertOpened} />
+        </li>
       </ul>
     </div>
   )
