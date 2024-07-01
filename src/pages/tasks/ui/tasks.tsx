@@ -1,8 +1,12 @@
 import { TodoCard } from '@entities/todo-card'
 import { Select } from '@shared/ui/select'
+import { useUnit } from 'effector-react'
 import { useState } from 'react'
+import { $tasks } from '../model'
 
 export const TasksPage = () => {
+  const tasks = useUnit($tasks)
+
   const [value, setValue] = useState('')
 
   return (
@@ -18,12 +22,11 @@ export const TasksPage = () => {
         <Select data={['apple', 'banana']} />
       </div>
       <ul className="flex flex-col gap-2">
-        <li>
-          <TodoCard />
-        </li>
-        <li>
-          <TodoCard />
-        </li>
+        {tasks.map((task) => (
+          <li key={task.id}>
+            <TodoCard />
+          </li>
+        ))}
       </ul>
     </div>
   )
