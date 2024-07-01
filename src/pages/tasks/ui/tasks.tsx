@@ -24,7 +24,7 @@ export const TasksPage = () => {
       <ul className="flex flex-col gap-2">
         {tasks.map((task) => (
           <li key={task.id}>
-            <TodoCard />
+            <TodoCard status={task.status} content={task.content} />
           </li>
         ))}
       </ul>
