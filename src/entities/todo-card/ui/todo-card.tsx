@@ -1,4 +1,5 @@
 import { CheckMark } from '@shared/ui/check-mark'
+import { DropdownMenu } from '@shared/ui/dropdown-menu'
 import { useLink } from 'atomic-router-react'
 import { useUnit } from 'effector-react'
 import { useState } from 'react'
@@ -22,21 +23,17 @@ export const TodoCard = ({ id, status, content }: Props) => {
         <CheckMark status={isDone} setStatus={setIsDone} />
         <h2 className="font-medium text-gray-600">{content}</h2>
       </div>
-      <div>
-        <ul className="flex items-center gap-4">
-          <li>
-            <button
-              className="h-5 w-5 cursor-pointer"
-              onClick={() => handleCopied(link)}
-            >
-              <img src="/icons/hyperlink.svg" alt="hyperlink" />
-            </button>
-          </li>
-          <li className="h-5 w-5 cursor-pointer">
-            <img src="/icons/settings.svg" alt="settings" />
-          </li>
-        </ul>
-      </div>
+      <ul className="flex items-center gap-4">
+        <li>
+          <button
+            className="h-5 w-5 cursor-pointer"
+            onClick={() => handleCopied(link)}
+          >
+            <img src="/icons/hyperlink.svg" alt="hyperlink" />
+          </button>
+        </li>
+        <DropdownMenu />
+      </ul>
     </div>
   )
 }
