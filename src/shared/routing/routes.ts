@@ -7,6 +7,7 @@ export const routes = {
     finish: createRoute(),
   },
   tasks: createRoute(),
+  task: createRoute(),
 }
 
 export const pageNotFoundRoute = createRoute()
@@ -17,4 +18,5 @@ export const routesMap: UnmappedRouteObject<any>[] = [
   { path: '/auth/sign-in', route: routes.auth.signIn },
   { path: '/auth/finish', route: routes.auth.finish },
   { path: '/tasks', route: routes.tasks },
+  { path: '/task/:id', route: routes.task },
 ]

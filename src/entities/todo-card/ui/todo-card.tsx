@@ -1,12 +1,19 @@
 import { CheckMark } from '@shared/ui/check-mark'
+import { useLink } from 'atomic-router-react'
+import { useUnit } from 'effector-react'
 import { useState } from 'react'
+import { linkCopied, taskRoute } from '../model'
 
 interface Props {
+  id: string
   status: boolean
   content?: string
 }
 
-export const TodoCard = ({ status, content }: Props) => {
+export const TodoCard = ({ id, status, content }: Props) => {
+  const link = useLink(taskRoute, { id })
+  const handleCopied = useUnit(linkCopied)
+
   const [isDone, setIsDone] = useState(status)
 
   return (
@@ -17,8 +24,13 @@ export const TodoCard = ({ status, content }: Props) => {
       </div>
       <div>
         <ul className="flex items-center gap-4">
-          <li className="h-5 w-5 cursor-pointer">
-            <img src="/icons/hyperlink.svg" alt="hyperlink" />
+          <li>
+            <button
+              className="h-5 w-5 cursor-pointer"
+              onClick={() => handleCopied(link)}
+            >
+              <img src="/icons/hyperlink.svg" alt="hyperlink" />
+            </button>
           </li>
           <li className="h-5 w-5 cursor-pointer">
             <img src="/icons/settings.svg" alt="settings" />
