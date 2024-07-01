@@ -1,6 +1,6 @@
 import * as RadixSelect from '@radix-ui/react-select'
 import { clsx } from 'clsx'
-import { forwardRef, ReactNode } from 'react'
+import { forwardRef, ReactNode, RefAttributes } from 'react'
 
 export const Select = () => {
   return (
@@ -48,6 +48,9 @@ export const Select = () => {
 interface SelectItemProps {
   className?: string
   children: ReactNode
+  value: string
+  disabled?: boolean
+  textValue?: string
 }
 
 export const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(
