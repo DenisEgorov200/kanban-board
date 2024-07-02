@@ -1,6 +1,5 @@
 import { TodoCard } from '@entities/todo-card'
 import { Accordion } from '@shared/ui/accordion'
-import { CheckMark } from '@shared/ui/check-mark'
 import { Select } from '@shared/ui/select'
 import { useUnit } from 'effector-react'
 import { useState } from 'react'
@@ -55,7 +54,7 @@ export const TasksPage = () => {
         </Accordion.Content>
       </Accordion>
       <ul className="flex flex-col gap-2">
-        {tasks.map((task) => (
+        {tasks?.map((task) => (
           <li key={task.id}>
             <TodoCard
               id={task.id}
