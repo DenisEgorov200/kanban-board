@@ -4,6 +4,7 @@ import {
   AccordionSingleProps,
   AccordionTriggerProps,
 } from '@radix-ui/react-accordion'
+import clsx from 'clsx'
 
 export const Accordion = ({
   type,
@@ -29,7 +30,12 @@ const Trigger = ({ className, children }: AccordionTriggerProps) => {
 
 const Content = ({ className, children }: AccordionContentProps) => {
   return (
-    <RadixAccordion.Content className={className}>
+    <RadixAccordion.Content
+      className={clsx(
+        'data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp',
+        className,
+      )}
+    >
       {children}
     </RadixAccordion.Content>
   )

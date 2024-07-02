@@ -10,6 +10,15 @@ export default {
         main: '0px 0.3px 0.9px rgba(0,0,0,0.1), 0px 1.6px 3.6px rgba(0,0,0,0.1)'
       },
       keyframes: {
+        // accordion
+        slideDown: {
+          from: { height: '0px' },
+          to: { height: 'var(--radix-accordion-content-height)' },
+        },
+        slideUp: {
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: '0px' },
+        },
         // alert-dialog
         overlayShow: {
           from: { opacity: '0' },
@@ -38,6 +47,9 @@ export default {
         },
       },
       animation: {
+        // accordion
+        slideDown: 'slideDown 300ms cubic-bezier(0.87, 0, 0.13, 1)',
+        slideUp: 'slideUp 300ms cubic-bezier(0.87, 0, 0.13, 1)',
         // alert-dialog
         overlayShow: 'overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
         contentShow: 'contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
