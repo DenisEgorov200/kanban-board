@@ -20,13 +20,13 @@ export const TasksGetFx = createEffect<void, Task[] | null, PostgrestError>(
   },
 )
 
-export const TasksCreateFx = createEffect<{ task: Task }, void, PostgrestError>(
-  async ({ task }) => {
-    const { id, createdAt, status, content } = task
+export const TasksCreateFx = createEffect<Task, void, PostgrestError>(
+  async ({ createdAt, status, content }) => {
+    console.log(content)
 
     const { error } = await client
       .from('tasks')
-      .insert({ id, created_at: createdAt, status, content })
+      .insert({ created_at: createdAt, status, content })
 
     checkError(error)
   },
