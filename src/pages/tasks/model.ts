@@ -4,12 +4,6 @@ import { chainAuthenticated } from '@shared/viewer'
 import { chainRoute } from 'atomic-router'
 import { attach, restore } from 'effector'
 
-interface Task {
-  id: string
-  status: boolean
-  content: string
-}
-
 export const currentRoute = routes.tasks
 export const authenticatedRoute = chainAuthenticated(currentRoute, {
   otherwise: routes.auth.signIn.open,
@@ -22,4 +16,4 @@ chainRoute({
   beforeOpen: TasksGetFx,
 })
 
-export const $tasks = restore<Task[]>(TasksGetFx, null)
+export const $tasks = restore(TasksGetFx, null)

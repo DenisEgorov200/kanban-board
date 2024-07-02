@@ -1,11 +1,20 @@
+import { PostgrestError } from '@supabase/supabase-js'
 import { createEffect } from 'effector'
 import { client } from '../client'
 import { checkError } from './common'
 
-export const TasksGetFx = createEffect(async () => {
-  const { data, error } = await client.from('tasks').select()
+interface Task {
+  id: string
+  status: boolean
+  content: string
+}
 
-  checkError(error)
+export const TasksGetFx = createEffect<void, Task[] | null, PostgrestError>(
+  async () => {
+    const { data, error } = await client.from('tasks').select()
 
-  return data
-})
+    checkError(error)
+
+    return data
+  },
+)
