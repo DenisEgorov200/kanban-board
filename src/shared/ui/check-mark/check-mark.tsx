@@ -1,16 +1,21 @@
 import * as Checkbox from '@radix-ui/react-checkbox'
+import { cn } from '@shared/lib/tw-merge'
 import clsx from 'clsx'
 
 interface Props {
   status?: boolean
   setStatus: (value: boolean) => void
+  className: string
 }
 
-export const CheckMark = ({ status, setStatus }: Props) => {
+export const CheckMark = ({ status, setStatus, className }: Props) => {
   return (
     <>
       <Checkbox.Root
-        className="group h-5 w-5 cursor-pointer rounded-full border border-blue-600 p-0.5 transition-opacity"
+        className={cn(
+          'group h-5 w-5 cursor-pointer rounded-full border border-blue-600 p-0.5 transition-opacity',
+          className,
+        )}
         id="c1"
         checked={status}
         onCheckedChange={() => setStatus(!status)}

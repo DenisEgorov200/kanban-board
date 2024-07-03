@@ -4,7 +4,7 @@ import {
   AccordionSingleProps,
   AccordionTriggerProps,
 } from '@radix-ui/react-accordion'
-import clsx from 'clsx'
+import { cn } from '@shared/lib/tw-merge'
 
 export const Accordion = ({
   type,
@@ -31,7 +31,7 @@ const Trigger = ({ className, children }: AccordionTriggerProps) => {
 const Content = ({ className, children }: AccordionContentProps) => {
   return (
     <RadixAccordion.Content
-      className={clsx(
+      className={cn(
         'data-[state=closed]:animate-slideUp data-[state=open]:animate-slideDown',
         className,
       )}
