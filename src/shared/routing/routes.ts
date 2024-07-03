@@ -8,6 +8,7 @@ export const routes = {
   },
   tasks: createRoute(),
   task: createRoute(),
+  profile: createRoute(),
 }
 
 export const pageNotFoundRoute = createRoute()
@@ -19,4 +20,5 @@ export const routesMap: UnmappedRouteObject<any>[] = [
   { path: '/auth/finish', route: routes.auth.finish },
   { path: '/tasks', route: routes.tasks },
   { path: '/task/:id', route: routes.task },
+  { path: '/profile/:id', route: routes.profile },
 ]
