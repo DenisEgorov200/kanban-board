@@ -1,6 +1,7 @@
 import { Avatar } from '@shared/ui/avatar'
 import { signOutFx } from '../model'
 import { useUnit } from 'effector-react'
+import { Button } from '@shared/ui/button'
 
 export const ProfilePage = () => {
   const handleSignOut = useUnit(signOutFx)
@@ -23,9 +24,7 @@ export const ProfilePage = () => {
             </p>
           </div>
           <div>
-            <button className="rounded border border-gray-200 px-5 py-2 font-medium transition-colors hover:bg-gray-50">
-              Редактировать
-            </button>
+            <Button>Редактировать</Button>
           </div>
         </div>
         <p className="text-paragraph max-w-[600px]">
@@ -35,12 +34,7 @@ export const ProfilePage = () => {
           culpa ratione!
         </p>
         <div className="mt-14">
-          <button
-            onClick={() => handleSignOut()}
-            className="rounded border border-gray-200 px-5 py-2 font-medium transition-colors hover:bg-gray-50"
-          >
-            Выйти
-          </button>
+          <Button onClick={() => handleSignOut()}>Выйти</Button>
         </div>
       </div>
     </>
