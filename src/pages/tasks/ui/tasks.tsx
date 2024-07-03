@@ -7,6 +7,7 @@ import { $content, $tasks, contentChanged, formSubmitted } from '../model'
 
 export const TasksPage = () => {
   const tasks = useUnit($tasks)
+
   const [content, handleContentChange] = useUnit([$content, contentChanged])
   const handleFormSubmit = useUnit(formSubmitted)
 

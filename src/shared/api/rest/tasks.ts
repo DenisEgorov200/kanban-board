@@ -6,6 +6,7 @@ import { checkError } from './common'
 interface Task {
   id: string
   createdAt: Date
+  deletedAt?: string | null
   status: boolean
   content: string
 }
@@ -29,5 +30,15 @@ export const TasksCreateFx = createEffect<{ task: Task }, void, PostgrestError>(
       .insert({ created_at: createdAt, status, content })
 
     checkError(error)
+  },
+)
+
+export const TasksDeleteFx = createEffect<{ id: string }, void, PostgrestError>(
+  async ({ id }) => {
+    await client
+      .from('tasks')
+      .update({ deleted_at: new Date().toISOString() })
+      .eq('id', id)
+      .throwOnError()
   },
 )

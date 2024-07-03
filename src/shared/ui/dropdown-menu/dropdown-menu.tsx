@@ -13,13 +13,13 @@ export const DropdownMenu = ({ open, onOpenChange }: DropdownMenuProps) => {
       </RadixDropdownMenu.Trigger>
 
       <RadixDropdownMenu.Portal>
-        <RadixDropdownMenu.Content className="data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade min-w-32 rounded-md bg-white shadow-md transition-colors hover:bg-gray-50">
+        <RadixDropdownMenu.Content className="min-w-32 rounded-md bg-white shadow-md transition-colors hover:bg-gray-50 data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade">
           <RadixDropdownMenu.Item
             onSelect={handleSelect}
             className="group relative flex cursor-pointer select-none items-center rounded bg-red-500 px-4 py-3 font-medium leading-none text-white outline-none data-[disabled]:pointer-events-none"
           >
             Delete
-            <div className="ml-auto pl-[20px] group-data-[highlighted]:text-white">
+            <div className="ml-auto pl-5 group-data-[highlighted]:text-white">
               <img src="/icons/trash.svg" alt="trash" />
             </div>
           </RadixDropdownMenu.Item>

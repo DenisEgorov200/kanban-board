@@ -10,8 +10,6 @@ import {
   restore,
   sample,
 } from 'effector'
-import { debounce } from 'patronum'
-import { v4 as uuidv4 } from 'uuid'
 
 export const currentRoute = routes.tasks
 export const authenticatedRoute = chainAuthenticated(currentRoute, {
@@ -27,6 +25,7 @@ chainRoute({
 })
 
 export const formSubmitted = createEvent()
+
 export const contentChanged = createEvent<string>()
 
 export const $tasks = restore(TasksGetFx, null)
