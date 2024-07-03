@@ -2,7 +2,8 @@ import { routes } from '@shared/routing'
 import { Link } from 'atomic-router-react'
 import { useUnit } from 'effector-react'
 import { ReactNode } from 'react'
-import { signOutFx } from '../model'
+import { $profile, signOutFx } from '../model'
+import { Avatar } from '@shared/ui/avatar'
 
 interface Props {
   children: ReactNode
@@ -11,6 +12,8 @@ interface Props {
 const LINKS = [{ id: 0, route: routes.tasks, value: 'tasks' }]
 
 export const LayoutBase = ({ children }: Props) => {
+  const profile = useUnit($profile)
+
   const handleSignOut = useUnit(signOutFx)
 
   return (
@@ -40,12 +43,22 @@ export const LayoutBase = ({ children }: Props) => {
             </ul>
           </div>
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-2">
-              <p className="font-medium text-gray-600">user-name</p>
-              <div className="h-8 w-8 overflow-hidden rounded-full">
-                <img src="https://placehold.co/100x100" alt="" />
-              </div>
-            </div>
+            {profile ? (
+              <Link
+                to={routes.profile}
+                params={{ id: profile?.id }}
+                className="flex items-center gap-2"
+              >
+                <p className="font-medium text-gray-600">user-name</p>
+                <Avatar
+                  src="https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?&w=128&h=128&dpr=2&q=80"
+                  alt="avatar"
+                  className="h-8 w-8"
+                />
+              </Link>
+            ) : (
+              <p>loading...</p>
+            )}
             <div className="flex items-center">
               <img
                 src="/icons/notification.svg"
