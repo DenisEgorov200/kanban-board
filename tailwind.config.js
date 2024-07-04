@@ -10,6 +10,15 @@ export default {
         main: '0px 0.3px 0.9px rgba(0,0,0,0.1), 0px 1.6px 3.6px rgba(0,0,0,0.1)'
       },
       keyframes: {
+        // dialog
+        overlayShow: {
+          from: { opacity: '0' },
+          to: { opacity: '1' },
+        },
+        contentShow: {
+          from: { opacity: '0', transform: 'translate(-50%, -48%) scale(0.96)' },
+          to: { opacity: '1', transform: 'translate(-50%, -50%) scale(1)' },
+        },
         // accordion
         slideDown: {
           from: { height: '0px' },
@@ -47,6 +56,9 @@ export default {
         },
       },
       animation: {
+        // dialog
+        overlayShow: 'overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
+        contentShow: 'contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
         // accordion
         slideDown: 'slideDown 300ms cubic-bezier(0.87, 0, 0.13, 1)',
         slideUp: 'slideUp 300ms cubic-bezier(0.87, 0, 0.13, 1)',

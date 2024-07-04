@@ -27,9 +27,9 @@ export const ProfilePage = () => {
           <div>
             <Modal>
               <Modal.Button asChild>
-                <Button>Edit profile</Button>
+                <Button>About</Button>
               </Modal.Button>
-              <Modal.Content title="Edit profile">
+              <Modal.Content title="About Trelllo">
                 <div className="mt-4 space-y-3 text-gray-600">
                   <p>This is a React app built with Radix UI!</p>
                   <p>Technologies used:</p>
