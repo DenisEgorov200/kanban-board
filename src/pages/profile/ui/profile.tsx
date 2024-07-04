@@ -3,6 +3,7 @@ import { Button } from '@shared/ui/button'
 import { Modal } from '@shared/ui/modal'
 import { useUnit } from 'effector-react'
 import { $profile, signOutFx } from '../model'
+import { Input } from '@shared/ui/input'
 
 export const ProfilePage = () => {
   const profile = useUnit($profile)
@@ -27,18 +28,10 @@ export const ProfilePage = () => {
           <div>
             <Modal>
               <Modal.Button asChild>
-                <Button>About</Button>
+                <Button>Edit profile</Button>
               </Modal.Button>
-              <Modal.Content title="About Trelllo">
-                <div className="mt-4 space-y-3 text-gray-600">
-                  <p>This is a React app built with Radix UI!</p>
-                  <p>Technologies used:</p>
-                  <ul className="list-disc pl-4">
-                    <li>Radix UI Dialog</li>
-                    <li>Next.js</li>
-                    <li>Tailwind CSS</li>
-                  </ul>
-                </div>
+              <Modal.Content title="Edit profile">
+                <ProfileForm />
               </Modal.Content>
             </Modal>
           </div>
@@ -50,9 +43,47 @@ export const ProfilePage = () => {
           culpa ratione!
         </p>
         <div className="mt-14">
-          <Button onClick={() => handleSignOut()}>Выйти</Button>
+          <Button onClick={() => handleSignOut()}>Logout</Button>
         </div>
       </div>
     </>
+  )
+}
+
+const ProfileForm = () => {
+  return (
+    <form action="" className="mt-3 flex h-full flex-col gap-3.5">
+      <div className="flex flex-col gap-1">
+        <label htmlFor="" className="text-button font-medium text-gray-400">
+          User name
+        </label>
+        <Input type="text" onValue={() => console.log('@changed')} />
+      </div>
+      <div className="flex flex-col gap-1">
+        <label htmlFor="" className="text-button font-medium text-gray-400">
+          Адрес профиля
+        </label>
+        <Input type="text" onValue={() => console.log('@changed')} />
+      </div>
+      <div className="flex flex-col gap-1">
+        <label htmlFor="" className="text-button font-medium text-gray-400">
+          Описание
+        </label>
+        <Input type="text" onValue={() => console.log('@changed')} />
+      </div>
+      <div className="mt-auto flex items-center gap-2.5">
+        <Modal.Close asChild>
+          <Button type="submit" className="w-full">
+            Отмена
+          </Button>
+        </Modal.Close>
+        <Button
+          type="submit"
+          className="w-full bg-blue-600 text-white hover:bg-blue-600/90"
+        >
+          Сохранить
+        </Button>
+      </div>
+    </form>
   )
 }
