@@ -6,7 +6,6 @@ import { useUnit } from 'effector-react'
 import { useState } from 'react'
 import {
   $alertOpen,
-  $taskId,
   alertOpened,
   linkCopied,
   taskIdChanged,
@@ -23,7 +22,7 @@ export const TodoCard = ({ id, status, content }: Props) => {
   const link = useLink(taskRoute, { id })
   const handleCopied = useUnit(linkCopied)
 
-  const [taskId, handleTaskIdChange] = useUnit([$taskId, taskIdChanged])
+  const handleTaskIdChange = useUnit(taskIdChanged)
 
   const [alertOpen, handleAlertOpened] = useUnit([$alertOpen, alertOpened])
 

@@ -5,7 +5,7 @@ import clsx from 'clsx'
 interface Props {
   status?: boolean
   setStatus: (value: boolean) => void
-  className: string
+  className?: string
 }
 
 export const CheckMark = ({ status, setStatus, className }: Props) => {

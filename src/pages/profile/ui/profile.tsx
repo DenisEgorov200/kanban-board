@@ -1,5 +1,6 @@
 import { Avatar } from '@shared/ui/avatar'
 import { Button } from '@shared/ui/button'
+import { Modal } from '@shared/ui/modal'
 import { useUnit } from 'effector-react'
 import { $profile, signOutFx } from '../model'
 
@@ -24,7 +25,22 @@ export const ProfilePage = () => {
             <p className="text-paragraph text-gray-400">{profile?.email}</p>
           </div>
           <div>
-            <Button>Редактировать</Button>
+            <Modal>
+              <Modal.Button asChild>
+                <Button>Edit profile</Button>
+              </Modal.Button>
+              <Modal.Content title="Edit profile">
+                <div className="mt-4 space-y-3 text-gray-600">
+                  <p>This is a React app built with Radix UI!</p>
+                  <p>Technologies used:</p>
+                  <ul className="list-disc pl-4">
+                    <li>Radix UI Dialog</li>
+                    <li>Next.js</li>
+                    <li>Tailwind CSS</li>
+                  </ul>
+                </div>
+              </Modal.Content>
+            </Modal>
           </div>
         </div>
         <p className="text-paragraph max-w-[600px]">
