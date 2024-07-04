@@ -67,14 +67,16 @@ const LoginForm = () => {
         OR
         <span className="absolute right-0 top-1/2 w-[45%] -translate-y-1/2 border border-gray-300" />
       </div>
-      <input
-        type="text"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => handleEmail(e.target.value)}
-        disabled={pending}
-        className="mb-3 w-full rounded-md border border-gray-300 bg-white px-3 py-2 focus:outline-blue-600"
-      />
+      <div className="max-w-96">
+        <input
+          type="text"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => handleEmail(e.target.value)}
+          disabled={pending}
+          className="mb-3 w-full rounded-md border border-gray-300 bg-white px-3 py-2 focus:outline-blue-600"
+        />
+      </div>
       {error ? (
         <p className="mb-3 font-medium text-red-400">{errorText[error]}</p>
       ) : null}
