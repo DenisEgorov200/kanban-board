@@ -1,4 +1,5 @@
 import { AlertDialog } from '@shared/ui/alert-dialog'
+import { Button } from '@shared/ui/button'
 import { CheckMark } from '@shared/ui/check-mark'
 import { DropdownMenu } from '@shared/ui/dropdown-menu'
 import { useLink } from 'atomic-router-react'
@@ -46,9 +47,18 @@ export const TodoCard = ({ id, status, content }: Props) => {
         <li>
           <DropdownMenu onOpenChange={handleAlertOpened} />
           <AlertDialog open={alertOpen} onOpenChange={handleAlertOpened}>
-            <AlertDialog.Content>
-              This action cannot be undone. This will permanently delete your
-              task and remove your data from our servers.
+            <AlertDialog.Content
+              description="This action cannot be undone. This will permanently delete your
+              task and remove your data from our servers."
+            >
+              <AlertDialog.Action>
+                <Button
+                  className="bg-red-500 text-white hover:bg-red-600"
+                  onClick={() => handleTaskIdChange(id)}
+                >
+                  Yes, delete task
+                </Button>
+              </AlertDialog.Action>
             </AlertDialog.Content>
           </AlertDialog>
         </li>

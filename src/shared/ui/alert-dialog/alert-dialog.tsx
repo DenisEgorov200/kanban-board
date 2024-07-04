@@ -1,5 +1,6 @@
 import * as RadixAlertDialog from '@radix-ui/react-alert-dialog'
 import {
+  AlertDialogActionProps,
   AlertDialogContentProps,
   AlertDialogProps,
 } from '@radix-ui/react-alert-dialog'
@@ -17,10 +18,11 @@ export const AlertDialog = ({
   )
 }
 
-const AlertDialogContent = ({
-  children,
-  ...props
-}: AlertDialogContentProps) => {
+interface Props extends AlertDialogContentProps {
+  description: string
+}
+
+const AlertDialogContent = ({ children, description, ...props }: Props) => {
   return (
     <RadixAlertDialog.Portal>
       <RadixAlertDialog.Overlay className="fixed inset-0 bg-black/5 data-[state=open]:animate-overlayShow" />
@@ -32,23 +34,28 @@ const AlertDialogContent = ({
           Are you absolutely sure?
         </RadixAlertDialog.Title>
         <RadixAlertDialog.Description className="mb-5 mt-4 leading-normal">
-          {children}
+          {description}
         </RadixAlertDialog.Description>
+
         <div className="flex justify-end gap-6">
           <RadixAlertDialog.Cancel asChild>
             <Button>Cancel</Button>
           </RadixAlertDialog.Cancel>
-          <RadixAlertDialog.Action asChild>
-            <Button className="bg-red-500 text-white hover:bg-red-600">
-              Yes, delete task
-            </Button>
-          </RadixAlertDialog.Action>
+          {children}
         </div>
       </RadixAlertDialog.Content>
     </RadixAlertDialog.Portal>
   )
 }
 
+const AlertDialogAction = ({ children, ...props }: AlertDialogActionProps) => {
+  return (
+    <RadixAlertDialog.Action {...props} asChild>
+      {children}
+    </RadixAlertDialog.Action>
+  )
+}
+
 AlertDialog.Button = RadixAlertDialog.Trigger
-AlertDialog.Action = RadixAlertDialog.Action
+AlertDialog.Action = AlertDialogAction
 AlertDialog.Content = AlertDialogContent
