@@ -1,9 +1,11 @@
 import { Avatar } from '@shared/ui/avatar'
-import { signOutFx } from '../model'
-import { useUnit } from 'effector-react'
 import { Button } from '@shared/ui/button'
+import { useUnit } from 'effector-react'
+import { $profile, signOutFx } from '../model'
 
 export const ProfilePage = () => {
+  const profile = useUnit($profile)
+
   const handleSignOut = useUnit(signOutFx)
 
   return (
@@ -19,9 +21,7 @@ export const ProfilePage = () => {
         <div className="mb-2 flex justify-between gap-2.5 max-sm:flex-col">
           <div className="flex flex-col gap-2.5 align-top">
             <h1 className="text-title text-xl font-semibold">Feaxh</h1>
-            <p className="text-paragraph text-gray-400">
-              egorov.denis.mem@gmail.com
-            </p>
+            <p className="text-paragraph text-gray-400">{profile?.email}</p>
           </div>
           <div>
             <Button>Редактировать</Button>

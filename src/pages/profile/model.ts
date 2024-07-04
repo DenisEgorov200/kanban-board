@@ -1,7 +1,7 @@
 import { api } from '@shared/api'
 import { routes } from '@shared/routing'
 import { chainAuthenticated } from '@shared/viewer'
-import { attach } from 'effector'
+import { attach, restore } from 'effector'
 
 export const currentRoute = routes.profile
 export const authenticatedRoute = chainAuthenticated(currentRoute, {
@@ -9,3 +9,5 @@ export const authenticatedRoute = chainAuthenticated(currentRoute, {
 })
 
 export const signOutFx = attach({ effect: api.auth.signOutFx })
+
+export const $profile = restore(api.auth.getMeFx, null)
