@@ -46,11 +46,10 @@ export const TodoCard = ({ id, status, content }: Props) => {
         <li>
           <DropdownMenu onOpenChange={handleAlertOpened} />
           <AlertDialog open={alertOpen} onOpenChange={handleAlertOpened}>
-            <AlertDialog.Action onClick={() => handleTaskIdChange(id)} asChild>
-              <button className="inline-flex items-center justify-center rounded bg-red-500 px-4 py-3 font-medium leading-none text-white outline-none transition-colors hover:bg-red-600 focus:shadow-lg">
-                Yes, delete task
-              </button>
-            </AlertDialog.Action>
+            <AlertDialog.Content>
+              This action cannot be undone. This will permanently delete your
+              task and remove your data from our servers.
+            </AlertDialog.Content>
           </AlertDialog>
         </li>
       </ul>
