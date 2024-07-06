@@ -1,11 +1,13 @@
 import { UniqueIdentifier } from '@dnd-kit/core'
 import { SortableContext, useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { cn } from '@shared/lib/tw-merge'
 
 interface Props {
   board: Column
   tasks: Task[]
   tasksIds?: string[]
+  className?: string
 }
 
 interface Column {
@@ -19,7 +21,7 @@ interface Task {
   content: string
 }
 
-export const Board = ({ board, tasks, tasksIds }: Props) => {
+export const Board = ({ board, tasks, tasksIds, className }: Props) => {
   const {
     setNodeRef,
     attributes,
@@ -52,7 +54,10 @@ export const Board = ({ board, tasks, tasksIds }: Props) => {
 
   return (
     <>
-      <div ref={setNodeRef} className="min-w-96 rounded-md bg-white">
+      <div
+        ref={setNodeRef}
+        className={cn('min-w-96 rounded-md px-5', className)}
+      >
         <div
           {...attributes}
           {...listeners}

@@ -24,8 +24,6 @@ export const Kanban = () => {
   const [columns, handleColumnDropped] = useUnit([$columns, columnDropped])
   const columnsId = useUnit($columnsId)
 
-  console.log('@columnsId', columnsId)
-
   const [activeColumn, handleActiveColumnChanged] = useUnit([
     $activeColumn,
     activeColumnChanged,
@@ -47,7 +45,7 @@ export const Kanban = () => {
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
     >
-      <ul className="flex gap-8">
+      <ul className="flex">
         <SortableContext items={columnsId}>
           {columns.map((column) => (
             <li key={column.id} className="w-full">
@@ -73,6 +71,7 @@ export const Kanban = () => {
             <Board
               board={activeColumn}
               tasks={tasks.filter((task) => task.columnId === activeColumn.id)}
+              className="bg-gray-50"
             />
           )}
         </DragOverlay>,
