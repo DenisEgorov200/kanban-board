@@ -97,59 +97,30 @@ const defaultTasks: Task[] = [
   },
 ]
 
-export const columnsChanged = createEvent()
-export const tasksChanged = createEvent()
-
-export const taskDropped = createEvent<{
-  activeId: UniqueIdentifier
-  overId: UniqueIdentifier
-}>()
 export const columnDropped = createEvent<{
   activeId: UniqueIdentifier
   overId: UniqueIdentifier
 }>()
 
 export const activeColumnChanged = createEvent<Column | null>()
-export const activeTaskChanged = createEvent<Task | null>()
 
 export const $columns = createStore(defaultCols)
 export const $columnsId = $columns.map((col) => col.map(({ id }) => id))
 
 export const $tasks = createStore(defaultTasks)
-export const $tasksIds = $tasks.map((task) => task.map(({ id }) => id))
 
 export const $activeColumn = createStore<Column | null>(null)
-export const $activeTask = createStore<Task | null>(null)
 
-$activeTask.on(activeTaskChanged, (_, activeTask) => activeTask)
 $activeColumn.on(activeColumnChanged, (_, activeColumn) => activeColumn)
-
-// TODO: Change order logic
-sample({
-  clock: taskDropped,
-  source: $tasks,
-  fn: (tasks, { activeId, overId }) => {
-    const activeIndex = tasks.findIndex((t) => t.id === activeId)
-    const overIndex = tasks.findIndex((t) => t.id === overId)
-
-    if (tasks[activeIndex].columnId !== tasks[overIndex].columnId) {
-      tasks[activeIndex].columnId = tasks[overIndex].columnId
-      return arrayMove(tasks, activeIndex, overIndex - 1)
-    }
-
-    return arrayMove(tasks, activeIndex, overIndex)
-  },
-  target: $tasks,
-})
 
 sample({
   clock: columnDropped,
-  source: $tasks,
-  fn: (tasks, { activeId, overId }) => {
-    const activeIndex = tasks.findIndex((t) => t.id === activeId)
-    tasks[activeIndex].columnId = overId
+  source: $columns,
+  fn: (columns, { activeId, overId }) => {
+    const activeColumnIndex = columns.findIndex((col) => col.id === activeId)
+    const overColumnIndex = columns.findIndex((col) => col.id === overId)
 
-    return arrayMove(tasks, activeIndex, activeIndex)
+    return arrayMove(columns, activeColumnIndex, overColumnIndex)
   },
-  target: $tasks,
+  target: $columns,
 })

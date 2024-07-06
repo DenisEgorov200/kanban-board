@@ -5,7 +5,7 @@ import { CSS } from '@dnd-kit/utilities'
 interface Props {
   board: Column
   tasks: Task[]
-  tasksIds: string[]
+  tasksIds?: string[]
 }
 
 interface Column {
@@ -20,10 +20,17 @@ interface Task {
 }
 
 export const Board = ({ board, tasks, tasksIds }: Props) => {
-  const { setNodeRef, transform, transition, isDragging } = useSortable({
+  const {
+    setNodeRef,
+    attributes,
+    listeners,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
     id: board.id,
     data: {
-      type: 'Column',
+      type: 'Board',
       board,
     },
   })
@@ -38,28 +45,26 @@ export const Board = ({ board, tasks, tasksIds }: Props) => {
       <div
         ref={setNodeRef}
         style={style}
-        className="flex h-[500px] max-h-[500px] w-[350px] flex-col rounded-md border-2 border-pink-500 bg-black opacity-40"
+        className="flex h-full max-h-full w-full flex-col rounded-md border border-gray-300 bg-gray-200 opacity-40"
       />
     )
   }
 
   return (
     <>
-      <div
-        ref={setNodeRef}
-        style={style}
-        className="min-w-96 rounded-md bg-white p-5"
-      >
-        <div className="mb-2 flex items-center justify-between border-b-2 border-black py-2 font-medium">
-          <p>
-            {board.title} {tasksIds.length}
-          </p>
+      <div ref={setNodeRef} className="min-w-96 rounded-md bg-white">
+        <div
+          {...attributes}
+          {...listeners}
+          className="mb-2 flex items-center justify-between border-b-2 border-black py-2 font-medium"
+        >
+          <p>{board.title} 0</p>
           <button className="h-5 w-5">
             <img src="/icons/settings.svg" alt="settings" />
           </button>
         </div>
         <ul className="flex flex-col gap-2">
-          <SortableContext items={tasksIds}>
+          <SortableContext items={tasks}>
             {tasks.map((task) => (
               <TaskCard key={task.id} task={task} />
             ))}
@@ -75,46 +80,8 @@ interface TaskCardProps {
 }
 
 export const TaskCard = ({ task }: TaskCardProps) => {
-  const {
-    setNodeRef,
-    attributes,
-    listeners,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({
-    id: task.id,
-    data: {
-      type: 'Task',
-      task,
-    },
-  })
-
-  const style = {
-    transition,
-    transform: CSS.Transform.toString(transform),
-  }
-
-  console.log('@task', task)
-
-  if (isDragging) {
-    return (
-      <div
-        ref={setNodeRef}
-        style={style}
-        className="relative flex h-[100px] min-h-[100px] cursor-grab items-center rounded-xl border-2 border-black bg-gray-200 p-2.5 text-left opacity-30"
-      />
-    )
-  }
-
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
-      className="rounded-md border-2 border-b-4 border-black bg-white p-2"
-    >
+    <div className="rounded-md border-2 border-b-4 border-black bg-white p-2">
       {task.content}
     </div>
   )

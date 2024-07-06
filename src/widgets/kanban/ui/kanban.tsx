@@ -1,7 +1,6 @@
 import {
   DndContext,
   DragEndEvent,
-  DragOverEvent,
   DragOverlay,
   DragStartEvent,
   PointerSensor,
@@ -9,39 +8,30 @@ import {
   useSensors,
 } from '@dnd-kit/core'
 import { SortableContext } from '@dnd-kit/sortable'
-import { Board, TaskCard } from '@entities/board'
+import { Board } from '@entities/board'
 import { useUnit } from 'effector-react'
 import { createPortal } from 'react-dom'
 import {
   $activeColumn,
-  $activeTask,
   $columns,
   $columnsId,
   $tasks,
-  $tasksIds,
   activeColumnChanged,
-  activeTaskChanged,
   columnDropped,
-  taskDropped,
 } from '../model'
 
 export const Kanban = () => {
   const [columns, handleColumnDropped] = useUnit([$columns, columnDropped])
   const columnsId = useUnit($columnsId)
 
-  const [tasks, handleTaskDropped] = useUnit([$tasks, taskDropped])
-
-  const tasksIds = useUnit($tasksIds)
+  console.log('@columnsId', columnsId)
 
   const [activeColumn, handleActiveColumnChanged] = useUnit([
     $activeColumn,
     activeColumnChanged,
   ])
 
-  const [activeTask, handleActiveTaskChanged] = useUnit([
-    $activeTask,
-    activeTaskChanged,
-  ])
+  const tasks = useUnit($tasks)
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -56,16 +46,14 @@ export const Kanban = () => {
       sensors={sensors}
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
-      onDragOver={onDragOver}
     >
-      <ul className="flex gap-2">
+      <ul className="flex gap-8">
         <SortableContext items={columnsId}>
           {columns.map((column) => (
             <li key={column.id} className="w-full">
               <Board
                 board={column}
                 tasks={tasks.filter((task) => task.columnId === column.id)}
-                tasksIds={tasksIds}
               />
             </li>
           ))}
@@ -85,10 +73,8 @@ export const Kanban = () => {
             <Board
               board={activeColumn}
               tasks={tasks.filter((task) => task.columnId === activeColumn.id)}
-              tasksIds={tasksIds}
             />
           )}
-          <TaskCard task={activeTask} />
         </DragOverlay>,
         document.body,
       )}
@@ -96,18 +82,13 @@ export const Kanban = () => {
   )
 
   function onDragStart(event: DragStartEvent) {
-    if (event.active.data.current?.type === 'Column') {
-      handleActiveColumnChanged(event.active.data.current.column)
-    }
-
-    if (event.active.data.current?.type === 'Task') {
-      handleActiveTaskChanged(event.active.data.current.task)
+    if (event.active.data.current?.type === 'Board') {
+      handleActiveColumnChanged(event.active.data.current.board)
     }
   }
 
   function onDragEnd(event: DragEndEvent) {
     handleActiveColumnChanged(null)
-    handleActiveTaskChanged(null)
 
     const { active, over } = event
     if (!over) return
@@ -117,34 +98,9 @@ export const Kanban = () => {
 
     if (activeId === overId) return
 
-    const isActiveAColumn = active.data.current?.type === 'Column'
+    const isActiveAColumn = active.data.current?.type === 'Board'
     if (!isActiveAColumn) return
-  }
 
-  function onDragOver(event: DragOverEvent) {
-    const { active, over } = event
-    if (!over) return
-
-    const activeId = active.id
-    const overId = over.id
-
-    if (activeId === overId) return
-
-    const isActiveATask = active.data.current?.type === 'Task'
-    const isOverATask = over.data.current?.type === 'Task'
-
-    if (!isActiveATask) return
-
-    // Im dropping a Task over another Task
-    if (isActiveATask && isOverATask) {
-      handleTaskDropped({ activeId, overId })
-    }
-
-    const isOverAColumn = over.data.current?.type === 'Column'
-
-    // Im dropping a Task over a column
-    if (isActiveATask && isOverAColumn) {
-      handleColumnDropped({ activeId, overId })
-    }
+    handleColumnDropped({ activeId, overId })
   }
 }
