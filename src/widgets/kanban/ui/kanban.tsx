@@ -1,35 +1,34 @@
 import {
   DndContext,
-  DragEndEvent,
   DragOverlay,
-  DragStartEvent,
   PointerSensor,
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
 import { SortableContext } from '@dnd-kit/sortable'
-import { Board } from '@entities/board'
+import { Board, TaskCard } from '@entities/board'
 import { useUnit } from 'effector-react'
 import { createPortal } from 'react-dom'
 import {
   $activeColumn,
+  $activeTask,
   $columns,
-  $columnsId,
   $tasks,
-  activeColumnChanged,
-  columnDropped,
+  dragEnded,
+  dragging,
+  dragStarted,
 } from '../model'
 
 export const Kanban = () => {
-  const [columns, handleColumnDropped] = useUnit([$columns, columnDropped])
-  const columnsId = useUnit($columnsId)
-
-  const [activeColumn, handleActiveColumnChanged] = useUnit([
-    $activeColumn,
-    activeColumnChanged,
-  ])
-
+  const columns = useUnit($columns)
   const tasks = useUnit($tasks)
+
+  const activeColumn = useUnit($activeColumn)
+  const activeTask = useUnit($activeTask)
+
+  const handleDragStart = useUnit(dragStarted)
+  const handleDragEnd = useUnit(dragEnded)
+  const handleDrag = useUnit(dragging)
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -42,11 +41,12 @@ export const Kanban = () => {
   return (
     <DndContext
       sensors={sensors}
-      onDragStart={onDragStart}
-      onDragEnd={onDragEnd}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      onDragOver={handleDrag}
     >
       <ul className="flex">
-        <SortableContext items={columnsId}>
+        <SortableContext items={columns.map(({ id }) => id)}>
           {columns.map((column) => (
             <li key={column.id} className="w-full">
               <Board
@@ -74,32 +74,10 @@ export const Kanban = () => {
               className="bg-gray-50"
             />
           )}
+          {activeTask && <TaskCard task={activeTask} />}
         </DragOverlay>,
         document.body,
       )}
     </DndContext>
   )
-
-  function onDragStart(event: DragStartEvent) {
-    if (event.active.data.current?.type === 'Board') {
-      handleActiveColumnChanged(event.active.data.current.board)
-    }
-  }
-
-  function onDragEnd(event: DragEndEvent) {
-    handleActiveColumnChanged(null)
-
-    const { active, over } = event
-    if (!over) return
-
-    const activeId = active.id
-    const overId = over.id
-
-    if (activeId === overId) return
-
-    const isActiveAColumn = active.data.current?.type === 'Board'
-    if (!isActiveAColumn) return
-
-    handleColumnDropped({ activeId, overId })
-  }
 }

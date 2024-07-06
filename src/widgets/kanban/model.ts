@@ -1,6 +1,12 @@
-import { UniqueIdentifier } from '@dnd-kit/core'
+import {
+  DragEndEvent,
+  DragOverEvent,
+  DragStartEvent,
+  UniqueIdentifier,
+} from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 import { createEvent, createStore, sample } from 'effector'
+import { debug } from 'patronum'
 
 export interface Column {
   id: string
@@ -96,31 +102,99 @@ const defaultTasks: Task[] = [
     content: 'Design and implement responsive UI',
   },
 ]
+const generateId = (id: string) => {
+  return `task_${id}`
+}
 
-export const columnDropped = createEvent<{
-  activeId: UniqueIdentifier
-  overId: UniqueIdentifier
-}>()
-
-export const activeColumnChanged = createEvent<Column | null>()
+export const dragStarted = createEvent<DragStartEvent>()
+export const dragEnded = createEvent<DragEndEvent>()
+export const dragging = createEvent<DragOverEvent>()
 
 export const $columns = createStore(defaultCols)
-export const $columnsId = $columns.map((col) => col.map(({ id }) => id))
-
 export const $tasks = createStore(defaultTasks)
 
 export const $activeColumn = createStore<Column | null>(null)
-
-$activeColumn.on(activeColumnChanged, (_, activeColumn) => activeColumn)
+export const $activeTask = createStore<Task | null>(null)
 
 sample({
-  clock: columnDropped,
+  clock: dragStarted,
+  filter: (event) =>
+    Boolean(event.active.data.current) &&
+    event.active.data.current?.type === 'Board',
+  fn: (event) => event.active.data.current?.board as Column | null,
+  target: $activeColumn,
+})
+
+sample({
+  clock: dragStarted,
+  filter: (event) =>
+    Boolean(event.active.data.current) &&
+    event.active.data.current?.type === 'Task',
+  fn: (event) => event.active.data.current?.task as Task | null,
+  target: $activeTask,
+})
+
+sample({
+  clock: dragEnded,
   source: $columns,
-  fn: (columns, { activeId, overId }) => {
-    const activeColumnIndex = columns.findIndex((col) => col.id === activeId)
-    const overColumnIndex = columns.findIndex((col) => col.id === overId)
+  filter: (_, event) =>
+    Boolean(event.over) &&
+    event.active.id !== event.over?.id &&
+    event.active.data.current?.type === 'Board',
+  fn: (columns, event) => {
+    const { active, over } = event
+
+    const activeColumnIndex = columns.findIndex(
+      (column) => column.id === active.id,
+    )
+
+    const overColumnIndex = columns.findIndex(
+      (column) => column.id === over?.id,
+    )
 
     return arrayMove(columns, activeColumnIndex, overColumnIndex)
   },
   target: $columns,
+})
+
+sample({
+  clock: dragEnded,
+  fn: () => null,
+  target: [$activeColumn, $activeTask],
+})
+
+sample({
+  clock: dragging,
+  source: $tasks,
+  filter: (_, event) =>
+    Boolean(event.over) &&
+    event.active.id !== event.over?.id &&
+    event.active.data.current?.type === 'Task',
+  fn: (tasks, event) => {
+    const { active, over } = event
+
+    const activeTaskIndex = tasks.findIndex(
+      (task) => generateId(task.id) === active.id,
+    )
+
+    switch (over?.data.current?.type) {
+      case 'Task':
+        const overTaskIndex = tasks.findIndex(
+          (task) => generateId(task.id) === over.id,
+        )
+
+        if (tasks[activeTaskIndex].columnId !== tasks[overTaskIndex].columnId) {
+          tasks[activeTaskIndex].columnId = tasks[overTaskIndex].columnId
+
+          return arrayMove(tasks, activeTaskIndex, overTaskIndex - 1)
+        }
+
+        return arrayMove(tasks, activeTaskIndex, overTaskIndex)
+      case 'Board':
+        return arrayMove(tasks, activeTaskIndex, activeTaskIndex)
+      default:
+        return tasks
+    }
+  },
+  target: $tasks,
 })

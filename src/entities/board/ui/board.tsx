@@ -6,7 +6,6 @@ import { cn } from '@shared/lib/tw-merge'
 interface Props {
   board: Column
   tasks: Task[]
-  tasksIds?: string[]
   className?: string
 }
 
@@ -21,7 +20,7 @@ interface Task {
   content: string
 }
 
-export const Board = ({ board, tasks, tasksIds, className }: Props) => {
+export const Board = ({ board, tasks, className }: Props) => {
   const {
     setNodeRef,
     attributes,
@@ -56,7 +55,10 @@ export const Board = ({ board, tasks, tasksIds, className }: Props) => {
     <>
       <div
         ref={setNodeRef}
-        className={cn('min-w-96 rounded-md px-5', className)}
+        className={cn(
+          'h-[500px] min-h-[500px] min-w-96 rounded-md px-5',
+          className,
+        )}
       >
         <div
           {...attributes}
@@ -69,7 +71,7 @@ export const Board = ({ board, tasks, tasksIds, className }: Props) => {
           </button>
         </div>
         <ul className="flex flex-col gap-2">
-          <SortableContext items={tasks}>
+          <SortableContext items={tasks.map(({ id }) => `task_${id}`)}>
             {tasks.map((task) => (
               <TaskCard key={task.id} task={task} />
             ))}
@@ -85,8 +87,44 @@ interface TaskCardProps {
 }
 
 export const TaskCard = ({ task }: TaskCardProps) => {
+  const {
+    setNodeRef,
+    attributes,
+    listeners,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: `task_${task.id}`,
+    data: {
+      type: 'Task',
+      task,
+    },
+  })
+
+  const style = {
+    transition,
+    transform: CSS.Transform.toString(transform),
+  }
+
+  if (isDragging) {
+    return (
+      <div
+        ref={setNodeRef}
+        style={style}
+        className="relative flex h-[100px] min-h-[100px] cursor-grab items-center rounded-xl border-2 border-black bg-gray-200 p-2.5 text-left opacity-30"
+      />
+    )
+  }
+
   return (
-    <div className="rounded-md border-2 border-b-4 border-black bg-white p-2">
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className="rounded-md border-2 border-b-4 border-black bg-white p-2"
+    >
       {task.content}
     </div>
   )
