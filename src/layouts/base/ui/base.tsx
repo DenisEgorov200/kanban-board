@@ -88,9 +88,9 @@ export const LayoutBase = ({ children }: Props) => {
           </div>
           <ul className="flex items-center gap-4">
             <li>
-              <a href="#" className="font-medium text-gray-600">
+              <Link to={routes.about} className="font-medium text-gray-600">
                 About
-              </a>
+              </Link>
             </li>
             <li>
               <a href="#" className="font-medium text-gray-600">
