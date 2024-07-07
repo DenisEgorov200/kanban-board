@@ -1,31 +1,24 @@
 import * as RadixDropdownMenu from '@radix-ui/react-dropdown-menu'
-import { DropdownMenuProps } from '@radix-ui/react-dropdown-menu'
+import {
+  DropdownMenuContentProps,
+  DropdownMenuProps,
+} from '@radix-ui/react-dropdown-menu'
 
-export const DropdownMenu = ({ open, onOpenChange }: DropdownMenuProps) => {
-  const handleSelect = () => {
-    onOpenChange?.(true)
-  }
+export const DropdownMenu = ({ children, open }: DropdownMenuProps) => {
+  return <RadixDropdownMenu.Root open={open}>{children}</RadixDropdownMenu.Root>
+}
 
+const DropdownMenuContent = ({ children }: DropdownMenuContentProps) => {
   return (
-    <RadixDropdownMenu.Root open={open}>
-      <RadixDropdownMenu.Trigger className="h-5 w-5 cursor-pointer">
-        <img src="/icons/settings.svg" alt="settings" />
-      </RadixDropdownMenu.Trigger>
-
-      <RadixDropdownMenu.Portal>
-        <RadixDropdownMenu.Content className="min-w-32 rounded-md bg-white shadow-md transition-colors hover:bg-gray-50 data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade">
-          <RadixDropdownMenu.Item
-            onSelect={handleSelect}
-            className="group relative flex cursor-pointer select-none items-center rounded bg-red-500 px-4 py-3 font-medium leading-none text-white outline-none data-[disabled]:pointer-events-none"
-          >
-            Delete
-            <div className="ml-auto pl-5 group-data-[highlighted]:text-white">
-              <img src="/icons/trash.svg" alt="trash" />
-            </div>
-          </RadixDropdownMenu.Item>
-          <RadixDropdownMenu.Arrow className="fill-gray-600" />
-        </RadixDropdownMenu.Content>
-      </RadixDropdownMenu.Portal>
-    </RadixDropdownMenu.Root>
+    <RadixDropdownMenu.Portal>
+      <RadixDropdownMenu.Content className="min-w-32 rounded-md bg-white shadow-md transition-colors hover:bg-gray-50 data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade">
+        {children}
+        <RadixDropdownMenu.Arrow className="fill-gray-600" />
+      </RadixDropdownMenu.Content>
+    </RadixDropdownMenu.Portal>
   )
 }
+
+DropdownMenu.Button = RadixDropdownMenu.Trigger
+DropdownMenu.Item = RadixDropdownMenu.Item
+DropdownMenu.Content = DropdownMenuContent

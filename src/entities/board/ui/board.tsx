@@ -2,6 +2,11 @@ import { UniqueIdentifier } from '@dnd-kit/core'
 import { SortableContext, useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { cn } from '@shared/lib/tw-merge'
+import { Button } from '@shared/ui/button'
+import { DropdownMenu } from '@shared/ui/dropdown-menu'
+import { useUnit } from 'effector-react'
+import { $alertOpen, alertOpened } from '../model'
+import { AlertDialog } from '@shared/ui/alert-dialog'
 
 interface Props {
   board: Column
@@ -36,6 +41,12 @@ export const Board = ({ board, tasks, className }: Props) => {
     },
   })
 
+  const [alertOpen, handleAlertOpened] = useUnit([$alertOpen, alertOpened])
+
+  const handleSelectDelete = () => {
+    handleAlertOpened(true)
+  }
+
   const style = {
     transition,
     transform: CSS.Transform.toString(transform),
@@ -66,9 +77,34 @@ export const Board = ({ board, tasks, className }: Props) => {
           className="mb-2 flex items-center justify-between border-b-2 border-black py-2 font-medium"
         >
           <p>{board.title} 0</p>
-          <button className="h-5 w-5">
-            <img src="/icons/settings.svg" alt="settings" />
-          </button>
+          <DropdownMenu>
+            <DropdownMenu.Button className="h-5 w-5 cursor-pointer">
+              <img src="/icons/settings.svg" alt="settings" />
+            </DropdownMenu.Button>
+            <DropdownMenu.Content>
+              <DropdownMenu.Item
+                onSelect={handleSelectDelete}
+                className="group relative flex cursor-pointer select-none items-center rounded bg-red-500 px-4 py-3 font-medium leading-none text-white outline-none data-[disabled]:pointer-events-none"
+              >
+                Delete
+                <div className="ml-auto pl-5 group-data-[highlighted]:text-white">
+                  <img src="/icons/trash.svg" alt="trash" />
+                </div>
+              </DropdownMenu.Item>
+            </DropdownMenu.Content>
+          </DropdownMenu>
+          <AlertDialog open={alertOpen} onOpenChange={handleAlertOpened}>
+            <AlertDialog.Content
+              description="This action cannot be undone. This will permanently delete your
+              board and remove your data from our servers."
+            >
+              <AlertDialog.Action>
+                <Button className="bg-red-500 text-white hover:bg-red-600">
+                  Yes, delete board
+                </Button>
+              </AlertDialog.Action>
+            </AlertDialog.Content>
+          </AlertDialog>
         </div>
         <ul className="flex flex-col gap-2">
           <SortableContext items={tasks.map(({ id }) => `task_${id}`)}>
@@ -76,6 +112,14 @@ export const Board = ({ board, tasks, className }: Props) => {
               <TaskCard key={task.id} task={task} />
             ))}
           </SortableContext>
+          <li className="w-full">
+            <Button className="inline-flex w-full items-center gap-2 rounded-md border-2 border-b-4 border-black bg-white p-2 text-start">
+              Add task
+              <div className="h-5 w-5 rounded-full border border-black">
+                <img src="/icons/add.svg" alt="plus" />
+              </div>
+            </Button>
+          </li>
         </ul>
       </div>
     </>
