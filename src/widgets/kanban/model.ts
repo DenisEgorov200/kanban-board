@@ -6,7 +6,7 @@ import {
 } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 import { createEvent, createStore, sample } from 'effector'
-import { debug } from 'patronum'
+import { debounce, debug } from 'patronum'
 
 export interface Column {
   id: string
@@ -163,8 +163,10 @@ sample({
   target: [$activeColumn, $activeTask],
 })
 
+const debouncedDragging = debounce({ source: dragging, timeout: 0 })
+
 sample({
-  clock: dragging,
+  clock: debouncedDragging,
   source: $tasks,
   filter: (_, event) =>
     Boolean(event.over) &&

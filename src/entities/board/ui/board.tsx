@@ -56,7 +56,7 @@ export const Board = ({ board, tasks, className }: Props) => {
       <div
         ref={setNodeRef}
         className={cn(
-          'h-[500px] min-h-[500px] min-w-96 rounded-md px-5',
+          'h-[500px] min-h-[500px] min-w-96 rounded-md p-5',
           className,
         )}
       >
