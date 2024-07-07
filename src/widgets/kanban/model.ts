@@ -6,7 +6,7 @@ import {
 } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 import { createEvent, createStore, sample } from 'effector'
-import { debounce, debug } from 'patronum'
+import { debounce } from 'patronum'
 
 export interface Column {
   id: string

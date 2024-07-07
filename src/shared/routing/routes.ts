@@ -9,6 +9,7 @@ export const routes = {
   tasks: createRoute(),
   task: createRoute(),
   profile: createRoute(),
+  about: createRoute(),
 }
 
 export const pageNotFoundRoute = createRoute()
@@ -21,4 +22,5 @@ export const routesMap: UnmappedRouteObject<any>[] = [
   { path: '/tasks', route: routes.tasks },
   { path: '/task/:id', route: routes.task },
   { path: '/profile/:id', route: routes.profile },
+  { path: '/about', route: routes.about },
 ]
