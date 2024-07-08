@@ -4,6 +4,7 @@ import { AboutRoute } from './about'
 import { AuthFinishRoute } from './auth/finish'
 import { SignInRoute } from './auth/sign-in'
 import { HomeRoute } from './home'
+import { OnboardingWorkspaceRoute } from './onboarding/workspace'
 import { ProfileRoute } from './profile'
 import { TasksRoute } from './tasks'
 
@@ -21,6 +22,10 @@ export const Pages = createRoutesView({
     {
       route: AuthFinishRoute.route,
       view: AuthFinishRoute.view,
+    },
+    {
+      route: OnboardingWorkspaceRoute.route,
+      view: OnboardingWorkspaceRoute.view,
     },
     {
       route: TasksRoute.route,

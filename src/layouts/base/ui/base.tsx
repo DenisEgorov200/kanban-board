@@ -1,15 +1,22 @@
 import { routes } from '@shared/routing'
+import { Avatar } from '@shared/ui/avatar'
 import { Link } from 'atomic-router-react'
 import { useUnit } from 'effector-react'
 import { ReactNode } from 'react'
 import { $profile, signOutFx } from '../model'
-import { Avatar } from '@shared/ui/avatar'
 
 interface Props {
   children: ReactNode
 }
 
-const LINKS = [{ id: 0, route: routes.tasks, value: 'tasks' }]
+const LINKS = [
+  {
+    id: 0,
+    route: routes.onboarding.workspace,
+    value: 'boards',
+  },
+  { id: 1, route: routes.tasks, value: 'tasks' },
+]
 
 export const LayoutBase = ({ children }: Props) => {
   const profile = useUnit($profile)
@@ -27,13 +34,13 @@ export const LayoutBase = ({ children }: Props) => {
               </div>
               <h1 className="text-4xl font-extrabold text-blue-600">Kanban</h1>
             </Link>
-            <ul className="flex items-center gap-8">
+            <ul className="flex items-center gap-2">
               {LINKS.map((link) => (
                 <li key={link.id}>
                   <Link
                     to={link.route}
-                    className="text-lg capitalize text-gray-600"
-                    activeClassName="font-semibold"
+                    className="px-3 py-2 text-lg capitalize text-gray-600"
+                    activeClassName="font-semibold bg-gray-50 rounded-md"
                     inactiveClassName="font-medium"
                   >
                     {link.value}
