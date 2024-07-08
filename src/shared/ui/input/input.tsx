@@ -45,7 +45,7 @@ export const Input = <T extends string>({
       {error ? (
         <span className="text-red-600">{error}</span>
       ) : (
-        hint && <span className="">{hint}</span>
+        hint && <span className="text-gray-500">{hint}</span>
       )}
     </label>
   ) : (

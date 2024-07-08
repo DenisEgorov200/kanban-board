@@ -9,3 +9,4 @@ export const authenticatedRoute = chainAuthenticated(currentRoute, {
 
 export const $name = createStore('')
 export const $slug = createStore('')
+export const $description = createStore('')

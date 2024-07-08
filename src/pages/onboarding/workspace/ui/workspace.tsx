@@ -1,7 +1,8 @@
 import { Button } from '@shared/ui/button'
 import { Input } from '@shared/ui/input'
+import { Textarea } from '@shared/ui/textarea'
 import { useUnit } from 'effector-react'
-import { $name, $slug } from '../model'
+import { $description, $name, $slug } from '../model'
 
 export const PageLoader = () => {
   return (
@@ -14,7 +15,7 @@ export const PageLoader = () => {
 }
 
 export const OnboardingWorkspacePage = () => {
-  const [name, slug] = useUnit([$name, $slug])
+  const [name, slug, description] = useUnit([$name, $slug, $description])
 
   return (
     <main className="flex h-dvh w-dvw flex-col items-center py-20">
@@ -46,6 +47,13 @@ export const OnboardingWorkspacePage = () => {
               name="slug"
               value={slug}
               placeholder="your-company-co"
+            />
+            <Textarea
+              label="Description"
+              onValue={() => console.log('@changed')}
+              name="description"
+              value={description}
+              placeholder="Our team organizes everything here."
             />
             <Button type="submit">Get started</Button>
           </form>
