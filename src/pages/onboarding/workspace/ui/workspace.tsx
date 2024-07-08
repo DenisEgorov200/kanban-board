@@ -2,7 +2,19 @@ import { Button } from '@shared/ui/button'
 import { Input } from '@shared/ui/input'
 import { Textarea } from '@shared/ui/textarea'
 import { useUnit } from 'effector-react'
-import { $description, $name, $slug } from '../model'
+import { FormEventHandler } from 'react'
+import {
+  $description,
+  $error,
+  $name,
+  $pending,
+  $slug,
+  descriptionChanged,
+  formSubmitted,
+  nameChanged,
+  OnboardingWorkspaceError,
+  slugChanged,
+} from '../model'
 
 export const PageLoader = () => {
   return (
@@ -14,8 +26,29 @@ export const PageLoader = () => {
   )
 }
 
+const errorText: { [Key in OnboardingWorkspaceError]: string } = {
+  NameInvalid: 'Please, check name of the workspace. It should be longer.',
+  SlugInvalid: 'Filled slug is incorrect. It can contain only a-z and dashes.',
+  SlugTaken: 'Filled slug already taken, please choose another one.',
+  UnknownError: 'Something wrong happened. Please try again.',
+}
+
 export const OnboardingWorkspacePage = () => {
-  const [name, slug, description] = useUnit([$name, $slug, $description])
+  const [name, slug, description, error, pending] = useUnit([
+    $name,
+    $slug,
+    $description,
+    $error,
+    $pending,
+  ])
+  const [handleFormSubmit, handleName, handleSlug, handleDescription] = useUnit(
+    [formSubmitted, nameChanged, slugChanged, descriptionChanged],
+  )
+
+  const onSubmit: FormEventHandler<HTMLFormElement> = (event) => {
+    event.preventDefault()
+    handleFormSubmit()
+  }
 
   return (
     <main className="flex h-dvh w-dvw flex-col items-center py-20">
@@ -33,29 +66,34 @@ export const OnboardingWorkspacePage = () => {
               boards in one location.
             </p>
           </div>
-          <form className="flex flex-col gap-3.5">
+          <form onSubmit={onSubmit} className="flex flex-col gap-3.5">
             <Input
               label="Workspace name"
-              onValue={() => console.log('@changed')}
+              onValue={handleName}
               name="name"
               value={name}
               placeholder="Your Company Co."
             />
             <Input
               label="kanban.io/workspaces/"
-              onValue={() => console.log('@changed')}
+              onValue={handleSlug}
               name="slug"
               value={slug}
               placeholder="your-company-co"
             />
             <Textarea
               label="Description"
-              onValue={() => console.log('@changed')}
+              onValue={handleDescription}
               name="description"
               value={description}
               placeholder="Our team organizes everything here."
             />
-            <Button type="submit">Get started</Button>
+            <div className="text-red-600">
+              {error ? errorText[error] : <span>&nbsp;</span>}
+            </div>
+            <Button type="submit" loading={pending}>
+              Get started
+            </Button>
           </form>
         </div>
       </section>

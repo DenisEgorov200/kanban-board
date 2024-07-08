@@ -1,7 +1,14 @@
-import { currentRoute } from './model'
-import { OnboardingWorkspacePage } from './ui/workspace'
+import { createRouteView } from 'atomic-router-react'
+import { currentRoute, workspaceLoadedRoute } from './model'
+import { OnboardingWorkspacePage, PageLoader } from './ui/workspace'
+
+const WorkspaceView = createRouteView({
+  route: workspaceLoadedRoute,
+  view: OnboardingWorkspacePage,
+  otherwise: PageLoader,
+})
 
 export const OnboardingWorkspaceRoute = {
-  view: OnboardingWorkspacePage,
+  view: WorkspaceView,
   route: currentRoute,
 }
